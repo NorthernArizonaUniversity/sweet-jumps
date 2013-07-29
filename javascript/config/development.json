@@ -1,0 +1,24 @@
+{
+  "app": {
+    "access-log": true,
+    "auto-start": true,
+    "parse-xml": true,
+    "port": 8181
+  },
+  "controllers-disabled": {
+  },
+  "middleware-disabled": {
+  },
+  "models-disabled": {
+  },
+  "plugins": {
+    "example": {}
+  },
+  "views": {
+    "engine": "jade"
+  },
+  "logger": "consolelog-node",
+  "mongodb": {
+    "url": "mongodb://localhost/db"
+  }
+}

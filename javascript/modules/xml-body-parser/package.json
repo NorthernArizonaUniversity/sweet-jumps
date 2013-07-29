@@ -1,0 +1,32 @@
+{
+  "name": "xmlBodyParser",
+  "description": "Parses POST requests with Content-Type: 'application/xml' for consumption in your node app",
+  "version": "0.0.1",
+  "main": "xmlBodyParser",
+  "private": true,
+  "dependencies": {
+    "xml2js": ">= 0.2.0"
+  },
+  "author": {
+    "name": "Arush Sehgal",
+    "email": "arush@getbrandid.com",
+    "url": "http://github.com/arush"
+  },
+  "keywords": [
+    "xml",
+    "json",
+    "express",
+    "bodyParser",
+    "parse",
+    "application/xml",
+    "text/xml"
+  ],
+  "readme": "# xmlBodyParser for express\n------\n\nParses POST requests with Content-Type: 'application/xml' for consumption in your node app. Written in coffeescript.\n\n\n\n## Installation\n\nPut the files in __your\\_app > node\\_modules > custom\\_modules > xmlBodyParser__ and then you can reference it anywhere in your project using:\n\n***CoffeeScript***\n\n    xmlBodyParser = require 'custom_modules/xmlBodyParser/xmlBodyParser'\n    \n\n------\n\n## Usage\n\nIn app.configure, use it like this:\n\n***CoffeeScript***\n\n    app.configure ->\n\t  app.use xmlBodyParser.xmlBodyParser\n\n------\n\n## License\n\nCopyright (c) 2013 Slot Machine Limited\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\nLog in to post comments\n",
+  "readmeFilename": "README.md",
+  "_id": "xmlBodyParser@0.0.1",
+  "dist": {
+    "shasum": "ffbbf59bd40520358c795fb680d781d0d64c7f50"
+  },
+  "_resolved": "git://github.com/brandid/express-xmlBodyParser.git#3d19352044e15b5b1caa2532d39ec08e673cd08b",
+  "_from": "xmlbodyparser@git://github.com/brandid/express-xmlBodyParser.git"
+}

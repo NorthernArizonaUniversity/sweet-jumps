@@ -1,0 +1,28 @@
+{
+  "name": "ewt-nodejs-boilerplate",
+  "version": "1.0.1",
+  "author": {
+    "name": "NAUEWT"
+  },
+  "description": "[Project Description]",
+  "scripts": {
+    "start": "node server.js",
+    "start-dev": "NODE_ENV=dev node server.js",
+    "supervise-dev": "NODE_ENV=dev supervisor -e \"node|js\" server.js",
+    "test": "mocha --compilers coffee:coffee-script --reporter spec tests/*"
+  },
+  "dependencies": {
+    "express": "latest",
+    "jade": "latest",
+    "nconf": "latest",
+    "async": "latest",
+    "mongoose": "latest",
+    "plugin-manager": "git+https://bitbucket.org/nauewt/plugin-manager.git",
+    "consolelog-node": "git://github.com/clutterskull/consolelog.node.js.git"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*",
+    "request": "latest"
+  }
+}
