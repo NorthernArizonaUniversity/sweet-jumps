@@ -10,8 +10,9 @@ This is a recommended file structure, but not required. If a particular director
 
 - *README.md* - A copy of this file.
 - *package.json* - NPM package definition. Contains common dependencies. Recommended: Should also contain scripts definitions for running prod, dev, and supervised environments.
-- *server.js* - Application entry point. Bootstraps environment, initializes and starts the app.
-- *app.js* - Application class. Wraps the Express application, performs necessary setup and includes.
+- *server-simple.js* - Application entry point. Bootstraps environment, initializes and starts the app. Simple version that uses the App class as is.
+- *server-hooked.js* - Application entry point. Bootstraps environment, initializes and starts the app. Example of using application events in initialization.
+- *server-extended.js* - Application entry point. Bootstraps environment, initializes and starts the app. Example of extending the base App class and overriding methods.
 - **app/** - Contains all local application business logic.
     - **controllers/** - Contains controller or route files. These modules should return a function with the definition `function (app, args...)`.
     - **middleware/** *(optional)* - Contains application specific Express middleware. These modules should return a function with the definition `function (app, args...)`.
@@ -19,6 +20,9 @@ This is a recommended file structure, but not required. If a particular director
     - **views/** - Contains view templates. Examples use Jade (preferred), but use whatever makes the most sense for your project.
 - **config/** - Application configuration files. Recommended: Files should be separated by environment (at least dev and prod, but also test and stage if appropriate, see example).
 - **modules/** - Contains arbitrary class modules that supply some global functionality, but which are separate from the app and not available via NPM. The structure should be similar to node_modules/. This directory also contains middleware which is used across projects that we have found to be generally useful (error handlers, body parsers, etc).
+    - **app/** - The main application module.
+        - *index.js* - Application class. Wraps the Express application, performs necessary setup and includes. Available as `exports.App`.
+        - *common.js* - Common utility functions used by App, but which might be handy elsewhere. Available as `exports.common`.
 - ***node_modules/*** - Contains module dependencies handled by NPM. Created automatically, do not manually manage.
 - **plugins/** *(optional)* - Contains plugin modules specifically built for the [plugin-manager package](https://bitbucket.org/nauewt/plugin-manager "BitBucket"). Plugins may contain controller, module, or library code. If a specific functionality is handled in plugins, the normal directory is optional. Alternatively, use a separate plugin-manager instance for each type of plugin and use the standard directory structure.
 - **resources/** *(optional)* - Arbitrary data files specific to this project: Database fixtures and migrations, certificates, documentation, flat files. Also, any source files for client-side CSS or JS (SASS, unminified JS, CoffeeScript, etc).

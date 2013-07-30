@@ -11,6 +11,8 @@ This is a recommended file structure, but not required. If a particular director
 - *README.md* - A copy of this file.
 - *package.json* - NPM package definition. Contains common dependencies. Recommended: Should also contain scripts definitions for running prod, dev, and supervised environments.
 - *server-simple.js* - Application entry point. Bootstraps environment, initializes and starts the app. Simple version that uses the App class as is.
+- *server-hooked.js* - Application entry point. Bootstraps environment, initializes and starts the app. Example of using application events in initialization.
+- *server-extended.js* - Application entry point. Bootstraps environment, initializes and starts the app. Example of extending the base App class and overriding methods.
 - **app/** - Contains all local application business logic.
     - **controllers/** - Contains controller or route files. These modules should return a function with the definition `function (app, args...)`.
     - **middleware/** *(optional)* - Contains application specific Express middleware. These modules should return a function with the definition `function (app, args...)`.
