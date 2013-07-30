@@ -25,6 +25,7 @@ var App = function (options) {
   events.EventEmitter.call(this)
 
   // Normalize option overrides
+  options = options || {}
   if (options.hasOwnProperty('auto-start')) {
     options.app = options.app || {}
     options.app['auto-start'] = options['auto-start']
@@ -44,13 +45,16 @@ var App = function (options) {
 util.inherits(App, events.EventEmitter)
 
 
+/**
+ * Initializes all app components and starts listening for connections
+ */
 App.prototype.start = function () {
   if (!this.ready) {
+    this.initializePlugins()  // load plugins first so that they can hook events
     this.initializeApp()
+    this.initializeModels()
     this.initializeMiddleware()
     this.initializeControllers()
-    this.initializeModels()
-    this.initializePlugins()
 
     this.logger.info('[App] Application ready to start.')
     this.ready = true
@@ -61,6 +65,10 @@ App.prototype.start = function () {
 }
 
 
+/**
+ * Starts listening for connections
+ * @param  {int} port Override listening port (defaults to 80 or config)
+ */
 App.prototype.listen = function (port) {
   port = port || this.config.get('app:port') || 80
   this.app.listen(port)
@@ -70,6 +78,10 @@ App.prototype.listen = function (port) {
 }
 
 
+/**
+ * Initializes app configuration with optional overrides.
+ * @param  {object} overrides overrides config values that may be set in config files
+ */
 App.prototype.initializeConfig = function (overrides) {
   var root = path.resolve(__dirname + '/../..')
   // Initialize nconf
@@ -92,6 +104,9 @@ App.prototype.initializeConfig = function (overrides) {
 }
 
 
+/**
+ * Initilizes the application logger (defaults to console)
+ */
 App.prototype.initializeLogger = function () {
   // Initialize Logger
   this.logger = console
@@ -117,7 +132,7 @@ App.prototype.initializeLogger = function () {
 
 
 /**
- * Configures the global express app
+ * Configures the main express app based on configuration
  */
 App.prototype.initializeApp = function () {
   // Initialize Express
@@ -152,46 +167,60 @@ App.prototype.initializeApp = function () {
   this.emit('app-initialized');
 }
 
+
+/**
+ * Initializes mounted express apps provided by plugins.
+ * @param  {object} app Express app to be initialized
+ */
 App.prototype.initializeSubapp = function (app) {
 
   this.emit('subapp-initialized', app);
 }
 
 
+/**
+ * Loads express components (middleware, controllers, etc) of the given type
+ * based on directory name in /app and configuration
+ * @param  {string} type
+ */
+App.prototype.initializeComponentsByType = function (type) {
+  if (typeof type !== 'string') return;
+
+  var modules = this.config.get(type)
+    , moduleNames = modules ? Object.keys(modules) : null
+
+  this[type] = common.requirePath(this.config.get('path:app') + '/' + type, moduleNames)
+
+  for (var name in this[type]) {
+    if (this[type].hasOwnProperty(name) && typeof this[type][name] === 'function') {
+      this[type][name](this.app, modules? modules[name] : {}, this)
+    }
+  }
+
+  this.emit(type + '-initialized');
+  this.emit(type + '-loaded', this[type]);
+}
+
+
+/**
+ * Initializes express midddleware in /app/middleware
+ */
 App.prototype.initializeMiddleware = function () {
-  var modules = this.config.get('middleware')
-    , moduleNames = modules ? Object.keys(modules) : null
-
-  this.middleware = common.requirePath(this.config.get('path:app') + '/middleware', moduleNames)
-
-  for (var name in this.middleware) {
-    if (this.middleware.hasOwnProperty(name) && typeof this.middleware[name] === 'function') {
-      this.middleware[name](this.app, this)
-    }
-  }
-
-  this.emit('middleware-initialized');
-  this.emit('middleware-loaded', this.middleware);
+  this.initializeComponentsByType('middleware')
 }
 
 
+/**
+ * Initializes express controllers (routes) in /app/controllers
+ */
 App.prototype.initializeControllers = function () {
-  var modules = this.config.get('controllers')
-    , moduleNames = modules ? Object.keys(modules) : null
-
-  this.controllers = common.requirePath(this.config.get('path:app') + '/controllers', moduleNames)
-
-  for (var name in this.controllers) {
-    if (this.controllers.hasOwnProperty(name) && typeof this.controllers[name] === 'function') {
-      this.controllers[name](this.app, this)
-    }
-  }
-
-  this.emit('controllers-initialized');
-  this.emit('controllers-loaded', this.controllers);
+  this.initializeComponentsByType('controllers')
 }
 
 
+/**
+ * Initializes models in /app/models (Mongoose models by default)
+ */
 App.prototype.initializeModels = function () {
   if (this.config.get('mongodb')) {
     this.mongoose = require('mongoose')
@@ -214,6 +243,9 @@ App.prototype.initializeModels = function () {
 }
 
 
+/**
+ * Initializes plugins based on configuration.
+ */
 App.prototype.initializePlugins = function () {
   var plugins = this.config.get('plugins')
   if (plugins) {

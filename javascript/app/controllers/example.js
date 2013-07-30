@@ -1,8 +1,10 @@
-module.exports =  function (app, context) {
+module.exports = function (app, options, context) {
   context.logger.info("Using example controller")
 
   app.get('/', function (req, res) {
-    res.send('I live!')
+    res.render('example/index', {
+      "message": "Hi! It works!"
+    })
   });
 }
 

@@ -6,10 +6,14 @@
     "port": 8181
   },
   "controllers-disabled": {
+    "how-to-use": "Change the name to 'controllers'. Keys are the name of the controllers you want to load and values are options you want to pass in.",
+    "example": { "option": "value" }
   },
   "middleware-disabled": {
+    "how-to-use": "Change the name to 'middleware'. Keys are the name of the controllers you want to load and values are options you want to pass in.",
   },
   "models-disabled": {
+    "how-to-use": "Change the name to 'models'. Keys are the name of the controllers you want to load and values are options you want to pass in.",
   },
   "plugins": {
     "example": {}
