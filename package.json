@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node server.js",
     "start-dev": "NODE_ENV=dev node server.js",
-    "supervise-dev": "NODE_ENV=dev supervisor -e \"node|js\" server.js",
+    "supervise-dev": "NODE_ENV=dev supervisor -e \"node|js|coffee\" server.js",
     "test": "mocha --compilers coffee:coffee-script --reporter spec tests/*"
   },
   "dependencies": {
