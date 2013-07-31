@@ -12,17 +12,21 @@
     "test": "mocha --compilers coffee:coffee-script --reporter spec tests/*"
   },
   "dependencies": {
+    "coffee-script": "latest",
     "express": "latest",
     "jade": "latest",
     "nconf": "latest",
-    "async": "latest",
+    "connect-compiler": "latest",
+    "connect-mongo": "latest",
     "mongoose": "latest",
+    "async": "latest",
     "plugin-manager": "git+https://bitbucket.org/nauewt/plugin-manager.git",
     "consolelog-node": "git://github.com/clutterskull/consolelog.node.js.git"
   },
   "devDependencies": {
     "mocha": "*",
     "should": "*",
-    "request": "latest"
+    "request": "latest",
+    "coffee-trace": "latest"
   }
 }

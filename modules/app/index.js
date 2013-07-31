@@ -8,13 +8,10 @@ var util = require('util')
   , common = require('./common')
   , PluginManager = require('plugin-manager').PluginManager
   , xmlBodyParser = require('../xml-body-parser').xmlBodyParser
+  , MongoStore = require('connect-mongo')(express)
+  , compiler = require('connect-compiler')
 
 
-// Normalize environtment name
-if (!process.env.NODE_ENV || process.env.NODE_ENV.match(/^prod/i))
-    process.env.NODE_ENV = 'production'
-else if (process.env.NODE_ENV.match(/^dev/i))
-    process.env.NODE_ENV = 'development'
 
 /**
  * Application Class
@@ -24,13 +21,7 @@ else if (process.env.NODE_ENV.match(/^dev/i))
 var App = function (options) {
   events.EventEmitter.call(this)
 
-  // Normalize option overrides
-  options = options || {}
-  if (options.hasOwnProperty('auto-start')) {
-    options.app = options.app || {}
-    options.app['auto-start'] = options['auto-start']
-    delete options['auto-start']
-  }
+  options = this.normalizeOptions(options)
 
   // Create the express app, configuration, and logger
   this.app = express()
@@ -38,11 +29,36 @@ var App = function (options) {
   this.initializeLogger()
 
   // Ready to initialize and run
-  if (this.config.get('app:auto-start'))
+  if (this.config.get('auto-start'))
     this.start()
 }
 // App extends EventEmitter
 util.inherits(App, events.EventEmitter)
+
+
+/**
+ * Normalizes environment variables and passed in option overrides.
+ */
+App.prototype.normalizeOptions = function (options) {
+  // Normalize environtment name
+  if (!process.env.NODE_ENV || process.env.NODE_ENV.match(/^prod/i))
+      process.env.NODE_ENV = 'production'
+  else if (process.env.NODE_ENV.match(/^dev/i))
+      process.env.NODE_ENV = 'development'
+
+  // Normalize option overrides (Prioritize env over passed in options)
+  options = options || {}
+  options['node-env'] = process.env.NODE_ENV
+
+  ;['access-log', 'auto-start', 'logger', 'parse-xml', 'port', 'secret', 'session', 'view-engine'].forEach(function (prop) {
+    var envProp = prop.toUpperCase().replace('-', '_')
+    if (process.env.hasOwnProperty(envProp)) {
+      options.server[prop] = process.env[envProp]
+    }
+  }.bind(this))
+
+  return options
+}
 
 
 /**
@@ -70,7 +86,7 @@ App.prototype.start = function () {
  * @param  {int} port Override listening port (defaults to 80 or config)
  */
 App.prototype.listen = function (port) {
-  port = port || this.config.get('app:port') || 80
+  port = port || this.config.get('port') || 80
   this.app.listen(port)
 
   this.logger.log('[App] Listening for connections on port ' + port)
@@ -142,23 +158,42 @@ App.prototype.initializeApp = function () {
   app.configure(function () {
     app.set('title', this.config.get('app:title') || '[EWT Node.js Project]')
     app.set('views', this.config.get('path:app') + '/views')
-    app.set('view engine', this.config.get('views:engine') || 'jade')
+    app.set('view engine', this.config.get('view-engine') || 'jade')
     app.use(express.compress())
     app.use(express.favicon())
     app.use(express.static(this.config.get('path:static')))
-    if (this.config.get('app:access-log')) app.use(express.logger())
-    if (this.config.get('app:parse-xml')) app.use(xmlBodyParser)
+    if (this.config.get('access-log')) app.use(express.logger())
+    if (this.config.get('parse-xml')) app.use(xmlBodyParser)
     app.use(express.bodyParser())
     app.use(app.router)
   }.bind(this))
 
-  // development only
+  // Sessions / Cookies
+  if (this.config.get('session') !== false) {
+    app.configure(function () {
+      var sessionOpts = { secret: this.config.get('secret') || null }
+      if (this.config.get('mongodb')) {
+        sessionOpts.store = new MongoStore(this.config.get('mongodb'))
+      }
+      app.use(express.cookieParser(sessionOpts.secret))
+      app.use(express.session(sessionOpts))
+    }.bind(this))
+  }
+
+  // Asset compiler
+  if (this.config.get('compiler')) {
+    app.configure(function () {
+      app.use(compiler(this.config.get('compiler')))
+    }.bind(this))
+  }
+
+  // Development only
   app.configure('development', function () {
     this.logger.warn('[App] Using development environment')
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
   }.bind(this))
 
-  // production only
+  // Production only
   app.configure('production', function () {
     app.enable('cache views')
     app.use(express.errorHandler({ dumpExceptions: true }))
