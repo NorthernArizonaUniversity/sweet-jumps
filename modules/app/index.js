@@ -257,22 +257,24 @@ App.prototype.initializeControllers = function () {
  * Initializes models in /app/models (Mongoose models by default)
  */
 App.prototype.initializeModels = function () {
-  if (this.config.get('mongodb')) {
+    // Open the mongoose connection
     this.mongoose = require('mongoose')
     this.mongoose.connect(this.config.get('mongodb:url') || 'localhost', function (err) {
       if (err) {
         this.logger.error(err)
         this.emit('error', error)
       } else {
-        // load modules into mongoose
-        var models = this.config.get('models')
-          , modelNames = models ? Object.keys(models) : null
-
-        this.models = common.requirePath(this.config.get('path:app') + '/models', modelNames)
-        this.logger.log('[App] Models loaded: ' + Object.keys(this.models).join(', '))
-        this.emit('models-loaded', modelNames);
+        this.emit('mongoose-connected');
       }
     }.bind(this))
+
+    // load modules into mongoose
+    var models = this.config.get('models')
+      , modelNames = models ? Object.keys(models) : null
+
+    this.models = common.requirePath(this.config.get('path:app') + '/models', modelNames)
+    this.logger.log('[App] Models loaded: ' + Object.keys(this.models).join(', '))
+    this.emit('models-loaded', modelNames);
   }
   this.emit('models-initialized');
 }
