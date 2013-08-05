@@ -12,7 +12,6 @@ var util = require('util')
   , compiler = require('connect-compiler')
 
 
-
 /**
  * Application Class
  * @param  {object} config Application config overrides
@@ -67,8 +66,8 @@ App.prototype.normalizeOptions = function (options) {
 App.prototype.start = function () {
   if (!this.ready) {
     this.initializePlugins()  // load plugins first so that they can hook events
-    this.initializeApp()
     this.initializeModels()
+    this.initializeApp()
     this.initializeMiddleware()
     this.initializeControllers()
 
@@ -150,67 +149,62 @@ App.prototype.initializeLogger = function () {
 /**
  * Configures the main express app based on configuration
  */
-App.prototype.initializeApp = function () {
+App.prototype.initializeApp = function (app) {
   // Initialize Express
-  var app = this.app
+  var app = app || this.app
 
   // all environments
-  app.configure(function () {
-    app.set('title', this.config.get('app:title') || '[EWT Node.js Project]')
-    app.set('views', this.config.get('path:app') + '/views')
-    app.set('view engine', this.config.get('view-engine') || 'jade')
-    app.use(express.compress())
-    app.use(express.favicon())
-    app.use(express.static(this.config.get('path:static')))
-    if (this.config.get('access-log')) app.use(express.logger())
-    if (this.config.get('parse-xml')) app.use(xmlBodyParser)
-    app.use(express.bodyParser())
-    app.use(app.router)
-  }.bind(this))
+  app.set('title', this.config.get('app:title') || '[EWT Node.js Project]')
+  app.set('views', this.config.get('path:app') + '/views')
+  app.set('view engine', this.config.get('view-engine') || 'jade')
+  app.use(express.compress())
+  app.use(express.favicon())
+  app.use(express.static(this.config.get('path:static')))
+  if (this.config.get('access-log')) app.use(express.logger())
+  if (this.config.get('parse-xml')) app.use(xmlBodyParser)
+  app.use(express.bodyParser())
+  app.use(express.methodOverride());
 
-  // Sessions / Cookies
-  if (this.config.get('session') !== false) {
-    app.configure(function () {
-      var sessionOpts = { secret: this.config.get('secret') || null }
-      if (this.config.get('mongodb')) {
-        sessionOpts.store = new MongoStore(this.config.get('mongodb'))
-      }
-      app.use(express.cookieParser(sessionOpts.secret))
-      app.use(express.session(sessionOpts))
-    }.bind(this))
-  }
-
-  // Asset compiler
+  // Init Asset Compiler (optional)
   if (this.config.get('compiler')) {
-    app.configure(function () {
-      app.use(compiler(this.config.get('compiler')))
-    }.bind(this))
+    this.logger.info('[App] Using compiled assets')
+    app.use(compiler(this.config.get('compiler')))
   }
 
   // Development only
-  app.configure('development', function () {
+  if (app.get('env') === 'development') {
     this.logger.warn('[App] Using development environment')
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
-  }.bind(this))
+  }
 
   // Production only
-  app.configure('production', function () {
+  if (app.get('env') === 'production') {
     app.enable('cache views')
     app.use(express.errorHandler({ dumpExceptions: true }))
-  }.bind(this))
+  }
 
-  this.emit('app-initialized');
+  // Init Session (optional)
+  if (this.config.get('session') !== false) {
+    var sessionOpts = { secret: this.config.get('secret') || null }
+    if (this.config.get('mongodb')) {
+      // Mongo session
+      this.logger.info('[App] Using session (MongoDB store)')
+      sessionOpts.store = new MongoStore(this.config.get('mongodb'))
+    } else {
+      // Default session
+      this.logger.info('[App] Using session (default store)')
+    }
+    app.use(express.cookieParser(sessionOpts.secret || null))
+    app.use(express.session(sessionOpts))
+  }
+
+  // Init Router
+  app.use(app.router)
+
+  this.emit('app-initialized', app);
 }
 
 
-/**
- * Initializes mounted express apps provided by plugins.
- * @param  {object} app Express app to be initialized
- */
-App.prototype.initializeSubapp = function (app) {
-
-  this.emit('subapp-initialized', app);
-}
 
 
 /**
@@ -257,13 +251,15 @@ App.prototype.initializeControllers = function () {
  * Initializes models in /app/models (Mongoose models by default)
  */
 App.prototype.initializeModels = function () {
+  if (this.config.get('mongodb')) {
     // Open the mongoose connection
     this.mongoose = require('mongoose')
     this.mongoose.connect(this.config.get('mongodb:url') || 'localhost', function (err) {
       if (err) {
         this.logger.error(err)
-        this.emit('error', error)
+        this.emit('error', err)
       } else {
+        this.logger.info("Mongoose connected")
         this.emit('mongoose-connected');
       }
     }.bind(this))
@@ -290,7 +286,7 @@ App.prototype.initializePlugins = function () {
       // Fires after plugin is loaded, but before plugin's init() is called
       // Add a subapp for the plugin to use.
       pl.app = express()
-      this.initializeSubapp(pl.app)
+      this.initializeApp(pl.app)
     }.bind(this))
 
     this.on('plugin-load', function (name, pl) {
