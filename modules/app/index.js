@@ -52,7 +52,7 @@ App.prototype.normalizeOptions = function (options) {
 
   ;['access-log', 'auto-start', 'logger', 'parse-xml', 'port', 'secret', 'session', 'view-engine'].forEach(function (prop) {
     var envProp = prop.toUpperCase().replace('-', '_')
-    if (process.env.hasOwnProperty(envProp)) {
+    if ({}.hasOwnProperty.call(process.env, envProp)) {
       options.server[prop] = process.env[envProp]
     }
   }.bind(this))
