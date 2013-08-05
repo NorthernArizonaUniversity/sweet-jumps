@@ -2,8 +2,9 @@
  * Dumps a given object to the console.
  */
 module.exports.dump = function (obj, depth, log) {
-  var log = log || console.log;
-  log(require("util").inspect(obj, false, (depth || 1), true));
+  var util = require("util")
+    , log = log || util.debug;
+  log(util.inspect(obj, false, (depth || 1), true));
 }
 
 
