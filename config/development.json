@@ -11,7 +11,8 @@
 
   "app": {
     "how-to-use": "Use this container for all your application specific settings",
-    "title": "[EWT Node.js Project]"
+    "title": "[EWT Node.js Project]",
+    "misc": "value"
   },
   "controllers-disabled": {
     "how-to-use": "Change the name to 'controllers'. Keys are the name of the controllers you want to load and values are options you want to pass in.",

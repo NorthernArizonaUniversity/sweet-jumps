@@ -3,3 +3,7 @@ extends ../layout
 block content
   h1 #{message}
   p This is an example page.
+  p= locals['how-to-use']
+  ul
+    each value, key in locals
+        li #{key}: #{value}

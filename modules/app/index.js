@@ -165,6 +165,11 @@ App.prototype.initializeApp = function (app) {
   app.use(express.bodyParser())
   app.use(express.methodOverride());
 
+  // Add the app config to locals
+  if (this.config.get('app')) {
+    app.locals(this.config.get('app'))
+  }
+
   // Init Asset Compiler (optional)
   if (this.config.get('compiler')) {
     this.logger.info('[App] Using compiled assets')
