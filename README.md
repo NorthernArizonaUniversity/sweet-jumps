@@ -1,10 +1,10 @@
 Node.js Webapp Boilerplate
-=================
+==========================
 
 NAUEWT unified boilerplate / skeleton for Node.js web applications for consistency of approach and maintenance.
 
 Structure
---------
+---------
 
 This is a recommended file structure, but not required. If a particular directory does not make sense to have remove it (eg: views and static in a JSON only webservice).
 
@@ -28,3 +28,16 @@ This is a recommended file structure, but not required. If a particular director
 - **resources/** *(optional)* - Arbitrary data files specific to this project: Database fixtures and migrations, certificates, documentation, flat files. Also, any source files for client-side CSS or JS (SASS, unminified JS, CoffeeScript, etc).
 - **static/** *(optional)* - Any public files that are served as-is to the client: Images, CSS, JS, etc. Recommended: CSS and JS files should be minified / compiled to this directory from resources/.
 - **test/** - Unit and behavioral tests. Recommended: Use this. At the very least do behavioral tests for your controllers.
+
+
+Quick Start
+-----------
+
+ 1. Create a new Git repository: `git init`
+ 2. Add the boilerplate as an upstream remote: `git remote add upstream git@bitbucket.org:nauewt/node.js-webapp-boilerplate.git`
+ 3. Pull the boilerplate down: `git pull upstream`
+ 4. Choose a server.js template version from the 3 available in the project root. Rename that file to `server.js` and delete the other 2.
+ 5. If you are extending the App class to customize functionality, consider moving the class to its own file in the root folder.
+ 6. Double check the config/development.json file and customize as needed. In particular, pay attention to the MongoDB and port settings. **Note**: the config file used at runtime is decided by NODE_ENV (usually either 'dev' or 'prod'). To set this for development, either pass it as a command line parameter `node server.js --node-env=dev` or as an environment variable `NODE_ENV=dev node server.js`. See the scripts section in package.json for details.
+ 7. Recommended is to use the scripts provided in package.json during development: `npm run-script start-dev` or `npm run-script supervise-dev` if you have Supervisor installed.
+ 8. Start writing routes/controllers, middleware, models, modules, or plugins as needed. Examples are provided for each. CoffeeScript is included by default, so feel free to use it.
