@@ -107,6 +107,10 @@ App.prototype.initializeConfig = function (overrides) {
              .overrides(overrides)
              .file({ file: root + "/config/" + this.app.get('env') + ".json" })
 
+  if (this.config.get('config-extends')) {
+    this.config.file('config-extends', { file: root + "/config/" + this.config.get('config-extends') + ".json" })
+  }
+
   this.config.set('path', {
     "root": root,
     "app": root + "/app",

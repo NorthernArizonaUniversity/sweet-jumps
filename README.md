@@ -39,6 +39,15 @@ Quick Start
  4. Install dependencies: `npm install`
  5. Choose a server.js template version from the 3 available in the project root. Rename that file to `server.js` and delete the other 2.
  6. If you are extending the App class to customize functionality, consider moving the class to its own file in the root folder.
- 7. Double check the config/development.json file and customize as needed. In particular, pay attention to the MongoDB and port settings. **Note**: the config file used at runtime is decided by NODE_ENV (usually either 'dev' or 'prod'). To set this for development, either pass it as a command line parameter `node server.js --node-env=dev` or as an environment variable `NODE_ENV=dev node server.js`. See the scripts section in package.json for details.
+ 7. Double check the json files in config and customize as needed. In particular, pay attention to the MongoDB and port settings. By default, the devlopment.json file extends and overrides the values in the production.json file, so check both.
+    - **Note**: the config file used at runtime is decided by NODE_ENV (usually either 'dev' or 'prod'). To set this for development, either pass it as a command line parameter `node server.js --node-env=dev` or as an environment variable `NODE_ENV=dev node server.js`. See the scripts section in package.json for exmaples.
  8. Recommended is to use the scripts provided in package.json during development: `npm run-script start-dev` or `npm run-script supervise-dev` if you have Supervisor installed.
  9. Start writing routes/controllers, middleware, models, modules, or plugins as needed. Examples are provided for each. CoffeeScript is included by default, so feel free to use it.
+
+
+Roadmap
+-------
+
+1. Integrate Grunt, allowing for watch compilation of assets, linting, and test running.
+2. Also possible with grunt, a cli tast to stub out components.
+3. Convert main application code to CoffeScript.
