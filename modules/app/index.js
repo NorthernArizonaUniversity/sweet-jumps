@@ -98,28 +98,35 @@ App.prototype.listen = function (port) {
  * @param  {object} overrides overrides config values that may be set in config files
  */
 App.prototype.initializeConfig = function (overrides) {
-  var root = path.resolve(__dirname + '/../..')
+  var root = path.resolve(__dirname + '/../../')
   // Initialize nconf
   // Option priority: Command line, Environment, constructor options, config file.
   this.config = nconf
   this.config.argv()
              .env()
              .overrides(overrides)
-             .file({ file: root + "/config/" + this.app.get('env') + ".json" })
+             .file({ file: root + '/config/' + this.app.get('env') + '.json' })
 
+  // If the environment config extends a different config file, load that as well
   if (this.config.get('config-extends')) {
-    this.config.file('config-extends', { file: root + "/config/" + this.config.get('config-extends') + ".json" })
+    this.config.file('config-extends', { file: root + '/config/' + this.config.get('config-extends') + '.json' })
   }
 
-  this.config.set('path', {
-    "root": root,
-    "app": root + "/app",
-    "resources": root + "/resources",
-    "static": root + "/static",
-    "plugins": root + "/plugins"
-  })
+  // Path defaults can be overridden in config
+  this.config.defaults({'path': {
+    'root': '',
+    'app': 'app',
+    'resources': 'resources',
+    'static': 'static',
+    'plugins': 'plugins'
+  }})
 
-  this.emit('config-initialized', this.config);
+  // Normalize path names to absolute
+  Object.keys(this.config.get('path')).forEach(function (name) {
+    this.config.set('path:' + name, path.resolve(__dirname + '/../../' + this.config.get('path:' + name)))
+  }.bind(this))
+
+  this.emit('config-initialized', this.config)
 }
 
 
@@ -131,7 +138,7 @@ App.prototype.initializeLogger = function () {
   this.logger = console
   try {
     var logger
-    if (logger = this.config.get("logger")) {
+    if (logger = this.config.get('logger')) {
       this.logger = require(logger.package || logger)
     }
     this.logger.info = this.logger.info || this.logger.log
@@ -144,7 +151,7 @@ App.prototype.initializeLogger = function () {
     this.logger.info('[App] Logger initialized')
 
   } catch (err) {
-    this.logger.error('[App] Could not initialize logger package "' + this.config.get("logger:package") + '"')
+    this.logger.error('[App] Could not initialize logger package "' + this.config.get('logger:package') + '"')
   }
   this.emit('logger-initialized', this.logger);
 }
@@ -268,7 +275,7 @@ App.prototype.initializeModels = function () {
         this.logger.error(err)
         this.emit('error', err)
       } else {
-        this.logger.info("Mongoose connected")
+        this.logger.info('Mongoose connected')
         this.emit('mongoose-connected');
       }
     }.bind(this))
