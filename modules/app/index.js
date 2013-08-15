@@ -116,6 +116,7 @@ App.prototype.initializeConfig = function (overrides) {
   this.config.defaults({'path': {
     'root': '',
     'app': 'app',
+    'modules': 'modules',
     'resources': 'resources',
     'static': 'static',
     'plugins': 'plugins'
@@ -320,8 +321,24 @@ App.prototype.initializePlugins = function () {
     }.bind(this))
 
     this.plugins = new PluginManager(this, this.config.get('path:plugins'), plugins)
+
+    // Local plugin management (could also do loadPlugin, etc)
+    this.getPlugin = this.plugins.getPlugin
+    this.getPlugins = this.plugins.plugins
+    this.invoke = this.plugins.invoke
   }
   this.emit('plugins-initialized');
+}
+
+
+/**
+ * Loads and returns a global level module (handy shortcut)
+ */
+App.prototype.getModule = function (module) {
+  if (module && module.length) {
+    return require(this.config.get('path:modules') + '/' + module)
+  }
+  return null
 }
 
 
