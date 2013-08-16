@@ -49,5 +49,6 @@ Roadmap
 -------
 
 1. Integrate Grunt, allowing for watch compilation of assets, linting, and test running.
-2. Also possible with grunt, a cli tast to stub out components.
-3. Convert main application code to CoffeScript.
+2. grunt-init, a cli tast to stub out components.
+3. Convert entire boilerplate to grunt-init template.
+4. Convert main application code to CoffeScript.

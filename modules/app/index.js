@@ -39,24 +39,42 @@ util.inherits(App, events.EventEmitter)
  * Normalizes environment variables and passed in option overrides.
  */
 App.prototype.normalizeOptions = function (options) {
-  // Normalize environtment name
-  if (!process.env.NODE_ENV || process.env.NODE_ENV.match(/^prod/i))
-      process.env.NODE_ENV = 'production'
-  else if (process.env.NODE_ENV.match(/^dev/i))
-      process.env.NODE_ENV = 'development'
-
   // Normalize option overrides (Prioritize env over passed in options)
   options = options || {}
-  options['node-env'] = process.env.NODE_ENV
 
-  ;['access-log', 'auto-start', 'logger', 'parse-xml', 'port', 'secret', 'session', 'view-engine'].forEach(function (prop) {
+  ;['node-env', 'access-log', 'auto-start', 'logger', 'parse-xml', 'port', 'secret', 'session', 'view-engine'].forEach(function (prop) {
     var envProp = prop.toUpperCase().replace('-', '_')
     if ({}.hasOwnProperty.call(process.env, envProp)) {
-      options.server[prop] = process.env[envProp]
+      options[prop] = process.env[envProp]
     }
   }.bind(this))
 
   return options
+}
+
+
+/**
+ * Normalizes the environment name (ie. prod -> production)
+ * @param {string} env optional
+ */
+App.prototype.normalizeEnv = function (env) {
+  env = env || (this.config && this.config.get('node-env')) || 'production'
+
+  if (env.match(/^prod/i))
+      env = 'production'
+  else if (env.match(/^dev/i))
+      env = 'development'
+
+  if (env !== process.env.NODE_ENV) {
+    process.env.NODE_ENV = env
+    this.app.set('env', env)
+    this.config.overrides({
+      'node-env': env, // does nothing if node-env came in on argv
+      'env': env
+    })
+  }
+
+  return env
 }
 
 
@@ -100,12 +118,17 @@ App.prototype.listen = function (port) {
 App.prototype.initializeConfig = function (overrides) {
   var root = path.resolve(__dirname + '/../../')
   // Initialize nconf
-  // Option priority: Command line, Environment, constructor options, config file.
+  // Option priority: Command line, Environment, constructor options, config file, defaults
   this.config = nconf
   this.config.argv()
              .env()
              .overrides(overrides)
-             .file({ file: root + '/config/' + this.app.get('env') + '.json' })
+
+  // Normalize the environment name before loading the config file
+  this.normalizeEnv()
+
+  // Load environment config
+  this.config.file({ file: root + '/config/' + this.app.get('env') + '.json' })
 
   // If the environment config extends a different config file, load that as well
   if (this.config.get('config-extends')) {
@@ -113,7 +136,7 @@ App.prototype.initializeConfig = function (overrides) {
   }
 
   // Path defaults can be overridden in config
-  this.config.defaults({'path': {
+  this.config.defaults({ 'path': {
     'root': '',
     'app': 'app',
     'modules': 'modules',
