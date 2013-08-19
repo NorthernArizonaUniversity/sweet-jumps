@@ -23,7 +23,7 @@ var ExampleApp = function (options) {
 
   // Hook init events here if auto-start is disabled.
   this.on('controllers-loaded', function (controllers) {
-    this.logger.warn("I am hooking controller loading and am going to do something awesome.")
+    this.logger.warn('I am hooking controller loading and am going to do something awesome.')
     this.logger.dump(controllers)
   }.bind(this))
 }
@@ -31,7 +31,7 @@ util.inherits(ExampleApp, App)
 
 // Override a core function completely, while retaining the super function
 ExampleApp.prototype.initializeModels = function () {
-  this.logger.warn("I have overridden model initialization, but not destructively!")
+  this.logger.warn('I have overridden model initialization, but not destructively!')
   App.prototype.initializeModels.apply(this)
 }
 

@@ -7,21 +7,21 @@ xmlBodyParser = (req, res, next) ->
   req.body ?= {}
 
   # ignore GET
-  return next()  if "GET" is req.method or "HEAD" is req.method
+  return next()  if 'GET' is req.method or 'HEAD' is req.method
 
   # check Content-Type
-  return next()  unless "application/xml" is req.headers['content-type'] or "application/xml" is utils.mime(req)
+  return next()  unless 'application/xml' is req.headers['content-type'] or 'application/xml' is utils.mime(req)
 
   # flag as parsed
   req._body = true
 
   # parse
-  buf = ""
-  req.setEncoding "utf8"
-  req.on "data", (chunk) ->
+  buf = ''
+  req.setEncoding 'utf8'
+  req.on 'data', (chunk) ->
     buf += chunk
 
-  req.on "end", ->
+  req.on 'end', ->
     try
       parser.parseString buf, (err, json) ->
         throw err if err

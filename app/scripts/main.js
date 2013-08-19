@@ -8,6 +8,7 @@
  */
 
 ;(function ($) {
+  'use strict';
   $(document).ready(function () {
     if (console) {
       console.log('example.js client script initialized!')

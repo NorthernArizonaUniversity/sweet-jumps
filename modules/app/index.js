@@ -1,8 +1,8 @@
+'use strict';
 
 var util = require('util')
   , events = require('events')
   , express = require('express')
-  , fs = require('fs')
   , path = require('path')
   , nconf = require('nconf')
   , common = require('./common')
@@ -28,8 +28,9 @@ var App = function (options) {
   this.initializeLogger()
 
   // Ready to initialize and run
-  if (this.config.get('auto-start'))
+  if (this.config.get('auto-start')) {
     this.start()
+  }
 }
 // App extends EventEmitter
 util.inherits(App, events.EventEmitter)
@@ -60,10 +61,11 @@ App.prototype.normalizeOptions = function (options) {
 App.prototype.normalizeEnv = function (env) {
   env = env || (this.config && this.config.get('node-env')) || 'production'
 
-  if (env.match(/^prod/i))
-      env = 'production'
-  else if (env.match(/^dev/i))
-      env = 'development'
+  if (env.match(/^prod/i)) {
+    env = 'production'
+  } else if (env.match(/^dev/i)) {
+    env = 'development'
+  }
 
   if (env !== process.env.NODE_ENV) {
     process.env.NODE_ENV = env
@@ -169,8 +171,9 @@ App.prototype.initializeLogger = function () {
     this.logger.dump = common
       ? common.dump
       : require('util').inspect
-    if (this.logger.restoreDefaults)
+    if (this.logger.restoreDefaults) {
       this.logger.restoreDefaults()
+    }
 
     this.logger.info('[App] Logger initialized')
 
@@ -186,7 +189,7 @@ App.prototype.initializeLogger = function () {
  */
 App.prototype.initializeApp = function (app) {
   // Initialize Express
-  var app = app || this.app
+  app = app || this.app
 
   // all environments
   app.set('title', this.config.get('app:title') || '[EWT Node.js Project]')
@@ -195,8 +198,12 @@ App.prototype.initializeApp = function (app) {
   app.use(express.compress())
   app.use(express.favicon())
   app.use(express.static(this.config.get('path:static')))
-  if (this.config.get('access-log')) app.use(express.logger())
-  if (this.config.get('parse-xml')) app.use(xmlBodyParser)
+  if (this.config.get('access-log')) {
+    app.use(express.logger())
+  }
+  if (this.config.get('parse-xml')) {
+    app.use(xmlBodyParser)
+  }
   app.use(express.bodyParser())
   app.use(express.methodOverride());
 
@@ -253,7 +260,9 @@ App.prototype.initializeApp = function (app) {
  * @param  {string} type
  */
 App.prototype.initializeComponentsByType = function (type) {
-  if (typeof type !== 'string') return;
+  if (typeof type !== 'string') {
+    return;
+  }
 
   var modules = this.config.get(type)
     , moduleNames = modules ? Object.keys(modules) : null
@@ -326,15 +335,16 @@ App.prototype.initializePlugins = function () {
       // Fires after plugin is loaded, but before plugin's init() is called
       // Add a subapp for the plugin to use.
       pl.app = express()
-      this.initializeApp(pl.app)
+      //this.initializeApp(pl.app)
     }.bind(this))
 
     this.on('plugin-load', function (name, pl) {
       // Fires after plugin is completely loaded and init'd
       // If plugin routes were defined, mount the plugin app to its path
       if (pl.app && pl.app.routes && Object.keys(pl.app.routes).length) {
-        if (!pl.options.path.match(/^\//))
+        if (!pl.options.path.match(/^\//)) {
           pl.options.path = '/' + pl.options.path
+        }
 
         this.app.use(pl.options.path || name, pl.app)
         this.logger.log('[App] Plugin loaded: ' + name + ', mounted at ' + (pl.options.path || name))

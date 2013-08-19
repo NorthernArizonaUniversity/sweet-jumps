@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema
 
@@ -25,7 +27,8 @@ ExampleSchema.statics = {
 }
 
 ExampleSchema.methods = {
-  authenticate: function (plainText) {
+  authenticate: function (password) {
+    password.test(/doesnothing/)
     return this.username === this.email
   },
 
@@ -33,11 +36,11 @@ ExampleSchema.methods = {
     var data = this.toObject()
     data.id = this.id
     delete(data._id)
-    detete(data.__v)
+    delete(data.__v)
     return data
   }
 }
 
-ExampleModel = mongoose.model('Example', ExampleSchema, 'examples')
+var ExampleModel = mongoose.model('Example', ExampleSchema, 'examples')
 exports.Model = exports.Example = ExampleModel
 exports.Schema = ExampleSchema

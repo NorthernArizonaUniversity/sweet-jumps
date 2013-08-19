@@ -1,0 +1,21 @@
+{
+  "camelcase": true,
+  "curly": true,
+  "eqeqeq": true,
+  "forin": true,
+  "immed": true,
+  "latedef": true,
+  "newcap": true,
+  "noarg": true,
+  "quotmark": true,
+  "undef": true,
+  "unused": true,
+
+  "asi": true,
+  "boss": true,
+  "eqnull": true,
+  "laxbreak": true,
+  "laxcomma": true,
+  "sub": true,
+  "node": true
+}

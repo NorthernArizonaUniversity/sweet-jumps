@@ -1,9 +1,12 @@
+'use strict';
+
 /**
  * Dumps a given object to the console.
  */
 module.exports.dump = function (obj, depth, log) {
-  var util = require("util")
-    , log = log || util.debug;
+  var util = require('util')
+
+  log = log || util.debug;
   log(util.inspect(obj, false, (depth || 1), true));
 }
 
@@ -15,9 +18,10 @@ module.exports.dump = function (obj, depth, log) {
 module.exports.merge = function (obj) {
   var sources = Array.prototype.slice.call(arguments, 1);
   for (var i = 0; i < sources.length; i++) {
-    for (key in (sources[i] || {})) {
-      if (sources[i].hasOwnProperty(key))
+    for (var key in (sources[i] || {})) {
+      if (sources[i].hasOwnProperty(key)) {
         obj[key] = sources[i][key];
+      }
     }
   }
   return obj;
@@ -32,12 +36,14 @@ module.exports.merge = function (obj) {
  */
 module.exports.requirePath = function (path, modules) {
   // If an empty array of modules to load was passed in, do nothing.
-  if (modules && !modules.length)
+  if (modules && !modules.length) {
     return {}
+  }
 
   // If no modules were given, load everything.
-  if (!modules)
+  if (!modules) {
     modules = require('fs').readdirSync(path)
+  }
 
   // Load them.
   var loaded = {}

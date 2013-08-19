@@ -8,7 +8,6 @@
   "scripts": {
     "start": "node server.js",
     "start-dev": "NODE_ENV=dev node server.js",
-    "supervise-dev": "NODE_ENV=dev supervisor -e \"node|js|coffee\" server.js",
     "test": "mocha --compilers coffee:coffee-script --reporter spec tests/*"
   },
   "dependencies": {
@@ -29,10 +28,12 @@
     "request": "latest",
     "coffee-trace": "latest",
     "grunt": "~0.4.1",
-    "grunt-develop": "~0.1.1",
     "grunt-contrib-watch": "~0.5.1",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-nodeunit": "~0.2.0",
-    "grunt-contrib-uglify": "~0.2.2"
+    "grunt-contrib-sass": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-shell-spawn": "~0.2.4",
+    "grunt-nodemon": "~0.1.0"
   }
 }
