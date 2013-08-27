@@ -30,9 +30,7 @@ module.exports = function(grunt) {
     jshint: {
       all: [
         'app/**/*.js',
-        'modules/*.js',
         'modules/**/*.js',
-        'plugins/*.js',
         'plugins/**/*.js',
         'server*.js',
         '<%= nodeunit.tests %>'
@@ -41,13 +39,12 @@ module.exports = function(grunt) {
         jshintrc: '.jshintrc',
         ignores: [
           'modules/**/node_modules/**/*.js',
-          'app/scripts/*.js',
           'app/scripts/**/*.js'
         ]
       }
     },
     nodeunit: {
-      tests: ['test/tasks/*_test.js']
+      tests: ['test/**/*_test.js']
     },
     uglify: {
       options: {
@@ -94,6 +91,14 @@ module.exports = function(grunt) {
     }
   })
 
+  grunt.loadNpmTasks('grunt-contrib-jshint')
+  grunt.loadNpmTasks('grunt-contrib-nodeunit')
+  grunt.loadNpmTasks('grunt-contrib-sass')
+  grunt.loadNpmTasks('grunt-contrib-uglify')
+  grunt.loadNpmTasks('grunt-contrib-watch')
+  grunt.loadNpmTasks('grunt-nodemon')
+  grunt.loadNpmTasks('grunt-shell-spawn')
+
   // Dynamic alias task to nodeunit. Run individual tests with: grunt test:events
   grunt.registerTask('test', function (file) {
     grunt.config('nodeunit.tests', String(grunt.config('nodeunit.tests')).replace('*', file || '*'))
@@ -110,14 +115,9 @@ module.exports = function(grunt) {
     grunt.task.run(['nodemon:server'])
   })
 
-  grunt.loadNpmTasks('grunt-contrib-jshint')
-  grunt.loadNpmTasks('grunt-contrib-sass')
-  grunt.loadNpmTasks('grunt-contrib-uglify')
-  grunt.loadNpmTasks('grunt-contrib-watch')
-  grunt.loadNpmTasks('grunt-nodemon')
-  grunt.loadNpmTasks('grunt-shell-spawn')
+  grunt.registerTask('build', ['jshint', 'uglify', 'sass:build', 'nodeunit'])
 
   // Default task(s).
-  grunt.registerTask('default', ['nodemon:server.js'])
+  grunt.registerTask('default', 'build')
 
 };

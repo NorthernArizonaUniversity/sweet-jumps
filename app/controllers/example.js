@@ -6,6 +6,6 @@ module.exports = function (app, options, context) {
     res.render('example/index', {
       'message': 'Hi! It works!'
     })
-  });
+  })
 }
 

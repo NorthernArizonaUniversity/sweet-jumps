@@ -15,12 +15,12 @@
     "express": "latest",
     "jade": "latest",
     "nconf": "latest",
-    "connect-compiler": "latest",
     "connect-mongo": "latest",
     "mongoose": "latest",
     "async": "latest",
     "plugin-manager": "git+https://bitbucket.org/nauewt/plugin-manager.git",
-    "consolelog-node": "git://github.com/clutterskull/consolelog.node.js.git"
+    "underscore": "~1.5.1",
+    "log4js": "~0.6.8"
   },
   "devDependencies": {
     "mocha": "*",

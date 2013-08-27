@@ -5,11 +5,11 @@ var util = require('util')
   , express = require('express')
   , path = require('path')
   , nconf = require('nconf')
+  , log4js = require('log4js')
   , common = require('./common')
   , PluginManager = require('plugin-manager').PluginManager
   , xmlBodyParser = require('../xml-body-parser').xmlBodyParser
   , MongoStore = require('connect-mongo')(express)
-  , compiler = require('connect-compiler')
 
 
 /**
@@ -108,7 +108,7 @@ App.prototype.listen = function (port) {
   port = port || this.config.get('port') || 80
   this.app.listen(port)
 
-  this.logger.log('[App] Listening for connections on port ' + port)
+  this.logger.info('[App] Listening for connections on port ' + port)
   this.emit('listen')
 }
 
@@ -157,30 +157,50 @@ App.prototype.initializeConfig = function (overrides) {
 
 
 /**
- * Initilizes the application logger (defaults to console)
+ * Initilizes the application logger (loads log4js by default, but will use console if necessary)
+ * Available levels (assuming log4js):
+ *   ALL, TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+ * Use either logger.trace(msg), logger.info(msg)...
+ * or logger.log('INFO', msg)
  */
 App.prototype.initializeLogger = function () {
-  // Initialize Logger
-  this.logger = console
-  try {
-    var logger
-    if (logger = this.config.get('logger')) {
-      this.logger = require(logger.package || logger)
-    }
-    this.logger.info = this.logger.info || this.logger.log
-    this.logger.dump = common
-      ? common.dump
-      : require('util').inspect
-    if (this.logger.restoreDefaults) {
-      this.logger.restoreDefaults()
-    }
+  if (log4js) {
+    log4js.configure(this.config.get('logger'))
 
-    this.logger.info('[App] Logger initialized')
-
-  } catch (err) {
-    this.logger.error('[App] Could not initialize logger package "' + this.config.get('logger:package') + '"')
+    this.logger = log4js.getLogger()
+    this.setLoggerLevel(this.config.get('logger:level'))
+  } else {
+    // Simulate the log4js interface with console
+    this.logger = {
+      log: function (lvl, msg) { console.log('[' + lvl + '] ' + msg) }
+      error: function (msg) { console.error('[ERROR] ' + msg) }
+      fatal: function (msg) { console.error('[FATAL] ' + msg) }
+    }
+    ;['trace', 'debug', 'info', 'warn'].forEach(function (lvl) {
+      this.logger[lvl] = function (msg) { this.logger.log(lvl, msg) }.bind(this)
+    })
   }
+  // Add the dumper
+  this.logger.dump = common
+    ? common.dump
+    : require('util').inspect
+
+  this.logger.info('[App] Logger initialized')
   this.emit('logger-initialized', this.logger);
+}
+
+
+/**
+ * Changes logger level if available.
+ */
+App.prototype.setLoggerLevel = function (level) {
+  level = level || 'ALL'
+  if (log4js) {
+      log4js.setGlobalLogLevel(level)
+  }
+  else if (this.logger && this.logger.setLevel) {
+    this.logger.setLevel(level)
+  }
 }
 
 
@@ -199,7 +219,10 @@ App.prototype.initializeApp = function (app) {
   app.use(express.favicon())
   app.use(express.static(this.config.get('path:static')))
   if (this.config.get('access-log')) {
-    app.use(express.logger())
+    app.use(log4js
+      ? log4js.connectLogger(this.logger, { level: 'auto' })
+      : express.logger()
+    )
   }
   if (this.config.get('parse-xml')) {
     app.use(xmlBodyParser)
@@ -210,12 +233,6 @@ App.prototype.initializeApp = function (app) {
   // Add the app config to locals
   if (this.config.get('app')) {
     app.locals(this.config.get('app'))
-  }
-
-  // Init Asset Compiler (optional)
-  if (this.config.get('compiler')) {
-    this.logger.info('[App] Using compiled assets')
-    app.use(compiler(this.config.get('compiler')))
   }
 
   // Development only
@@ -318,7 +335,7 @@ App.prototype.initializeModels = function () {
       , modelNames = models ? Object.keys(models) : null
 
     this.models = common.requirePath(this.config.get('path:app') + '/models', modelNames)
-    this.logger.log('[App] Models loaded: ' + Object.keys(this.models).join(', '))
+    this.logger.info('[App] Models loaded: ' + Object.keys(this.models).join(', '))
     this.emit('models-loaded', modelNames);
   }
   this.emit('models-initialized');
@@ -347,9 +364,9 @@ App.prototype.initializePlugins = function () {
         }
 
         this.app.use(pl.options.path || name, pl.app)
-        this.logger.log('[App] Plugin loaded: ' + name + ', mounted at ' + (pl.options.path || name))
+        this.logger.info('[App] Plugin loaded: ' + name + ', mounted at ' + (pl.options.path || name))
       } else {
-        this.logger.log('[App] Plugin loaded: ' + name)
+        this.logger.info('[App] Plugin loaded: ' + name)
       }
     }.bind(this))
 
