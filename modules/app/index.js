@@ -1,4 +1,5 @@
 'use strict';
+require('coffee-script')
 
 var util = require('util')
   , events = require('events')
@@ -208,7 +209,7 @@ App.prototype.getLogger = function (category) {
 App.prototype.setLoggerLevel = function (level) {
   level = level || 'ALL'
   if (log4js) {
-      log4js.setGlobalLogLevel(level)
+    log4js.setGlobalLogLevel(level)
   }
   else if (this.logger && this.logger.setLevel) {
     this.logger.setLevel(level)
@@ -364,7 +365,7 @@ App.prototype.initializePlugins = function () {
       // Fires after plugin is loaded, but before plugin's init() is called
       // Add a subapp for the plugin to use.
       pl.app = express()
-      //this.initializeApp(pl.app)
+      pl.logger = this.getLogger('[plgn] ' + name)
     }.bind(this))
 
     this.on('plugin-load', function (name, pl) {

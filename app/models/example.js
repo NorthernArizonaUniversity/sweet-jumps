@@ -2,6 +2,10 @@
 
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema
+  // To get a logger instance, use the following (preferably you would not need a logger in a model)
+  , logger = require('log4js').getLogger('[model] example')
+
+logger.info('Example model init')
 
 /**
  * Example Schema

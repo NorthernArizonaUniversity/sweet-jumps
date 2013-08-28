@@ -15,7 +15,7 @@ module.exports = function(grunt) {
           file: 'server.js',
           args: [],
           nodeArgs: ['--debug'],
-          ignoredFiles: ['README.md', 'node_modules/**'],
+          ignoredFiles: ['README.md', 'node_modules/**', '.git/**'],
           //watchedExtensions: ['js'],
           //watchedFolders: ['test', 'tasks'],
           delayTime: 1,
