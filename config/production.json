@@ -11,7 +11,8 @@
     "appenders": [
       { "type": "console" }
     ],
-    "replaceConsole": true
+    "replaceConsole": true,
+    "level": "WARN"
   },
 
   "app": {

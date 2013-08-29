@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
-
   // Project configuration.
   grunt.initConfig({
+    // Config
     pkg: grunt.file.readJSON('package.json'),
     path: {
       js_src: 'app/scripts',
@@ -9,6 +9,7 @@ module.exports = function(grunt) {
       css_src: 'app/styles',
       css_dest: 'static/css'
     },
+    // Nodemon - Runs the server and restarts on changes
     nodemon: {
       server: {
         options: {
@@ -27,13 +28,25 @@ module.exports = function(grunt) {
         }
       }
     },
+    // Mocha - Runs tests in the test directory
+    mocha: {
+      all: {
+        src: 'test/**/*.test.*'
+      },
+      nyan: {
+        options: {
+          reporter: 'nyan'
+        },
+        src: 'test/**/*.test.*'
+      }
+    },
+    // Linter - See .jshintrc for options
     jshint: {
       all: [
         'app/**/*.js',
         'modules/**/*.js',
         'plugins/**/*.js',
-        'server*.js',
-        '<%= nodeunit.tests %>'
+        'server*.js'
       ],
       options: {
         jshintrc: '.jshintrc',
@@ -43,9 +56,7 @@ module.exports = function(grunt) {
         ]
       }
     },
-    nodeunit: {
-      tests: ['test/**/*_test.js']
-    },
+    // Uglify - TODO: Replace with closure
     uglify: {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
@@ -55,6 +66,7 @@ module.exports = function(grunt) {
         dest: '<%= path.js_dest %>/main.min.js'
       }
     },
+    // Sass compiler - TODO: Replace with stylus?
     sass: {
       check: {
         options: { check: true },
@@ -72,12 +84,8 @@ module.exports = function(grunt) {
         }
       }
     },
+    // Watches for changes in given files and reruns tasks
     watch: {
-      jshint: {
-        options: { atBegin: true },
-        files: ['<%= jshint.all %>'],
-        tasks: ['jshint'],
-      },
       uglify: {
         options: { atBegin: true },
         files: ['<%= path.js_src %>/*.js', '<%= path.js_src %>/**/*.js'],
@@ -87,27 +95,52 @@ module.exports = function(grunt) {
         options: { atBegin: true },
         files: ['<%= path.css_src %>/*.scss', '<%= path.css_src %>/**/*.scss'],
         tasks: ['sass:build']
+      },
+      client: {
+        options: { atBegin: true },
+        files: [
+          '<%= path.js_src %>/*.js', '<%= path.js_src %>/**/*.js',
+          '<%= path.css_src %>/*.scss', '<%= path.css_src %>/**/*.scss'
+        ],
+        tasks: ['uglify', 'sass:build']
+      },
+
+      jshint: {
+        options: { atBegin: true },
+        files: ['<%= jshint.all %>'],
+        tasks: ['jshint'],
+      },
+      test: {
+        options: { atBegin: true },
+        files: [
+          'app/**/*.js', 'app/**/*.coffee',
+          'modules/**/*.js', 'modules/**/*.coffee',
+          'plugins/**/*.js', 'plugins/**/*.coffee',
+          'test/**/*.js', 'test/**/*.coffee'
+        ],
+        tasks: ['mocha:all']
+      },
+      check: {
+        options: { atBegin: true },
+        files: ['<%= watch.jshint.files %>', '<%= watch.test.files %>'],
+        tasks: ['jshint', 'mocha:all']
       }
     }
   })
 
   grunt.loadNpmTasks('grunt-contrib-jshint')
-  grunt.loadNpmTasks('grunt-contrib-nodeunit')
   grunt.loadNpmTasks('grunt-contrib-sass')
   grunt.loadNpmTasks('grunt-contrib-uglify')
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-nodemon')
   grunt.loadNpmTasks('grunt-shell-spawn')
 
-  // Dynamic alias task to nodeunit. Run individual tests with: grunt test:events
-  grunt.registerTask('test', function (file) {
-    grunt.config('nodeunit.tests', String(grunt.config('nodeunit.tests')).replace('*', file || '*'))
-    grunt.task.run('nodeunit')
-  })
 
+  // Development task to Lint and run unit tests on file change.
+  grunt.registerTask('develop-check', ['watch:check'])
+  // Development task to compile client files on change.
+  grunt.registerTask('develop-client', ['watch:client'])
   // Dynamic develop task for running server files. Defaults to server.js
-  grunt.registerTask('develop-check', ['watch:jshint', 'sass:check'])
-  grunt.registerTask('develop-client', ['watch'])
   grunt.registerTask('develop', function (file) {
     if (file) {
       grunt.config('nodemon.server.options.file', file)
@@ -115,9 +148,51 @@ module.exports = function(grunt) {
     grunt.task.run(['nodemon:server'])
   })
 
-  grunt.registerTask('build', ['jshint', 'uglify', 'sass:build', 'nodeunit'])
+  // Lints, runs tests, and builds client files.
+  grunt.registerTask('build', 'mocha:all', ['jshint', 'uglify', 'sass:build'])
 
   // Default task(s).
   grunt.registerTask('default', 'build')
 
-};
+  // Dynamic alias task to mocha. Run individual tests with: grunt test:<file>
+  grunt.registerTask('test', function (file) {
+    grunt.config('mocha.all', file || grunt.config('mocha.all'))
+    grunt.task.run('mocha:all')
+  })
+
+  // Mocha test runner.
+  grunt.registerMultiTask('mocha','Runs the mocha test suite', function() {
+    var src = this.data.src || 'test/*'
+      , options = this.data.options || {}
+      , command = ['NODE_ENV=test ./node_modules/.bin/mocha'
+                  , '--compilers coffee:coffee-script'
+                  , '--reporter ' + (options.reporter || 'spec')
+                  , '--require coffee-script'
+                  , '--require test/bootstrap'
+                  , '--colors']
+      , e = require('child_process').exec
+      , done = this.async()
+
+      delete(options.reporter)
+      for (k in options) {
+        if (options.hasOwnProperty(k)) {
+          if (!Array.isArray(options[k])) {
+            options[k] = [options[k]]
+          }
+          options[k].forEach(function (v) {
+            command.push('--' + k + ' ' + v)
+          })
+        }
+      }
+
+      command.push(src)
+      //grunt.log.writeln(command.join(' '))
+      //
+    e(command.join(' '), function (err, stdout, stderr) {
+      grunt.log.writeln(stdout)
+      grunt.log.writeln(stderr)
+      done(true)
+    })
+  })
+
+}

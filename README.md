@@ -44,11 +44,12 @@ Quick Start
 7. Double check the json files in config and customize as needed. In particular, pay attention to the MongoDB and port settings. By default, the devlopment.json file extends and overrides the values in the production.json file, so check both.
   - **Note**: the config file used at runtime is decided by NODE_ENV (usually either 'dev' or 'prod'). To set this for development, either pass it as a command line parameter `node server.js --node-env=dev` or as an environment variable `NODE_ENV=dev node server.js`. Grunt handles this for you during development.
   - You may want to, in your project repository, move the existing config files to .sample.json and make local, ignored copies of them so that passwords, paths, or secrets are not stored in the repository.
-8. Use Grunt during development. Several Grunt tasks are included to ease development, provide linting, unit testing, asset management etc. In particular, during development you should have 2 or 3 terminal windows open running the following Grunt tasks.
+8. If you don't already have Grunt on your system, install it: `npm install -g grunt-cli`
+9. Use Grunt during development. Several Grunt tasks are included to ease development, provide linting, unit testing, asset management etc. In particular, during development you should have 2 or 3 terminal windows open running the following Grunt tasks.
   - "grunt develop": Starts the node server.js in dev mode and watches for changes (assumes you have a server.js, if you need to run another file, add it after develop: "grunt develop:server-simple.js"). You should run at least this tast; it replaces the need to run with supervisor.
   - "grunt develop-check": Watches for server file changes and lints them.
   - "grunt develop-client": Watches client files for changes and rebuilds if necessary
-9. Start writing routes/controllers, middleware, models, modules, or plugins as needed. Examples are provided for each. CoffeeScript is included by default, so feel free to use it.
+10. Start writing routes/controllers, middleware, models, modules, or plugins as needed. Examples are provided for each. CoffeeScript is included by default, so feel free to use it.
 
 
 Configuration

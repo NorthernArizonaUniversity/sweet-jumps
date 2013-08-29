@@ -1,5 +1,8 @@
 {
   "how-to-use": "Any config file may extend a base config file using the config-extends key (the base configuration file may not extend).",
   "config-extends": "production",
-  "port": 8181
+  "port": 8181,
+  "logger": {
+    "level": "ALL"
+  }
 }
