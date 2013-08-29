@@ -118,8 +118,8 @@ App.prototype.listen = function (port) {
  * Initializes app configuration with optional overrides.
  * @param  {object} overrides overrides config values that may be set in config files
  */
-App.prototype.initializeConfig = function (overrides) {
-  var root = path.resolve(__dirname + '/../../')
+App.prototype.initializeConfig = function (overrides, root) {
+  root = root || path.resolve(__dirname + '/../../')
   // Initialize nconf
   // Option priority: Command line, Environment, constructor options, config file, defaults
   this.config = nconf
@@ -131,7 +131,7 @@ App.prototype.initializeConfig = function (overrides) {
   this.normalizeEnv()
 
   // Load environment config
-  this.config.file({ file: root + '/config/' + this.app.get('env') + '.json' })
+  this.config.file({ file: root + '/config/' + this.config.get('env') + '.json' })
 
   // If the environment config extends a different config file, load that as well
   if (this.config.get('config-extends')) {

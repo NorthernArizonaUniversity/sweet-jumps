@@ -1,0 +1,7 @@
+{
+  "config-extends": "production",
+  "mongodb": { "url": "mongodb://localhost/db_test" },
+  "logger": {
+    "level": "ALL"
+  }
+}
