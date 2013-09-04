@@ -131,7 +131,7 @@ App.prototype.initializeConfig = function (overrides, root) {
   this.normalizeEnv()
 
   // Load environment config
-  this.config.file({ file: root + '/config/' + this.config.get('env') + '.json' })
+  this.config.file({ file: root + '/config/' + process.env.NODE_ENV + '.json' })
 
   // If the environment config extends a different config file, load that as well
   if (this.config.get('config-extends')) {
@@ -248,9 +248,9 @@ App.prototype.initializeApp = function (app) {
     app.locals(this.config.get('app'))
   }
 
-  // Development only
-  if (app.get('env') === 'development') {
-    this.logger.warn('Using development environment')
+  // Development or test only
+  if (app.get('env') === 'development' || app.get('env') === 'test') {
+    this.logger.warn('Using ' + app.get('env') + ' environment')
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
   }
 

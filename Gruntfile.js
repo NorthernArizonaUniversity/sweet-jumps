@@ -33,6 +33,9 @@ module.exports = function(grunt) {
       all: {
         src: 'test/**/*.test.*'
       },
+      test: {
+        src: null
+      },
       nyan: {
         options: {
           reporter: 'nyan'
@@ -135,6 +138,21 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-nodemon')
   grunt.loadNpmTasks('grunt-shell-spawn')
 
+  // Dynamic task to run the server with a given env
+  grunt.registerTask('server', function (env) {
+    if (
+      !grunt.file.exists(grunt.config('nodemon.server.options.file'))
+      && grunt.file.exists('server-simple.js')
+    ) {
+      grunt.config('nodemon.server.options.file', 'server-simple.js')
+    }
+
+    if (env) {
+      grunt.config('nodemon.server.options.env.NODE_ENV', env || dev)
+    }
+
+    grunt.task.run('nodemon:server')
+  })
 
   // Development task to Lint and run unit tests on file change.
   grunt.registerTask('develop-check', ['watch:check'])
@@ -142,26 +160,36 @@ module.exports = function(grunt) {
   grunt.registerTask('develop-client', ['watch:client'])
   // Dynamic develop task for running server files. Defaults to server.js
   grunt.registerTask('develop', function (file) {
-    if (file) {
+    if (
+      !grunt.file.exists(grunt.config('nodemon.server.options.file'))
+      && grunt.file.exists('server-simple.js')
+    ) {
+      file = file || 'server-simple.js'
+    }
+
+    if (file === 'check' || file === 'client') {
+      return grunt.task.run(['develop-' + file])
+    } else if (file) {
       grunt.config('nodemon.server.options.file', file)
     }
-    grunt.task.run(['nodemon:server'])
+
+    grunt.task.run('nodemon:server')
   })
 
   // Lints, runs tests, and builds client files.
-  grunt.registerTask('build', 'mocha:all', ['jshint', 'uglify', 'sass:build'])
+  grunt.registerTask('build', ['jshint', 'mocha:all', 'uglify', 'sass:build'])
 
   // Default task(s).
   grunt.registerTask('default', 'build')
 
   // Dynamic alias task to mocha. Run individual tests with: grunt test:<file>
   grunt.registerTask('test', function (file) {
-    grunt.config('mocha.all', file || grunt.config('mocha.all'))
-    grunt.task.run('mocha:all')
+    grunt.config('mocha.test.src', file || grunt.config('mocha.test.src'))
+    grunt.task.run('mocha:test')
   })
 
   // Mocha test runner.
-  grunt.registerMultiTask('mocha','Runs the mocha test suite', function() {
+  grunt.registerMultiTask('mocha', 'Runs the mocha test suite', function() {
     var src = this.data.src || 'test/*'
       , options = this.data.options || {}
       , command = ['NODE_ENV=test ./node_modules/.bin/mocha'

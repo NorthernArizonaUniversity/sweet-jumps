@@ -33,6 +33,7 @@
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-contrib-watch": "~0.5.1",
     "grunt-shell-spawn": "~0.2.4",
-    "grunt-nodemon": "~0.1.0"
+    "grunt-nodemon": "~0.1.0",
+    "zombie": "~2.0.0-alpha21"
   }
 }

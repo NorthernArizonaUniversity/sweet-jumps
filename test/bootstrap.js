@@ -17,6 +17,11 @@ global.expect = chai.expect
 global.should = chai.should()
 // --
 
+// Zombie browser (global class for custom instances)
+var Browser = require('zombie')
+global.Browser = Browser
+// --
+
 // Helper
 var Helper = function () {
   // Helper class can load models and modules if required by the test
@@ -105,9 +110,39 @@ Helper.prototype.model = function (name) {
   return model.Model
 }
 
+
+Helper.prototype.browser = function (options) {
+  // configure a Browser object to use for functional / behavior tests
+  options = common.merge({
+    site: 'http://localhost:' + (this.config.get('port') || 80),
+    json: false
+  }, options)
+
+  if (options.json) {
+    delete options.json
+    options.headers = options.headers || {}
+    options.headers['Content-Type'] = 'application/json'
+  }
+
+  this.browser = new Browser(options)
+
+  // make sure the server is running (autorun?)
+  this.browser.visit('/', function (e, browser, status) {
+    if (e) {
+      console.error('Could not reach local server at ' + options.site + '\nPlease make sure it is running!')
+      throw(e)
+    }
+  }.bind(this))
+
+  return this.browser
+}
+
+
 global.test = new Helper()
 // --
 
-console.info('  Available globals: assert, expect, test')
-console.info('    test.db, test.dump')
+console.info('  Available globals:')
+console.info('    assert, expect, should,')
+console.info('    Browser,')
+console.info('    test: test.db, test.dump(), test.model(), test.module(), test.browser()')
 console.info('--== Done ==--\n')
