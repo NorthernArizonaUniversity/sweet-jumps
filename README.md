@@ -95,8 +95,11 @@ Included Components
   - Async
   - Underscore
   - Grunt
-  - Request
-  - NodeUnit
+- Development / Testing
+  - Grunt
+  - Mocha (test framework) - http://visionmedia.github.io/mocha/
+  - Chai (test assertions) - http://chaijs.com/
+  - Zombie (headless http client) - http://zombie.labnotes.org/
 
 
 Roadmap

@@ -22,6 +22,11 @@ var Browser = require('zombie')
 global.Browser = Browser
 // --
 
+// request
+global.request = require('request')
+// --
+
+
 // Helper
 var Helper = function () {
   // Helper class can load models and modules if required by the test
@@ -143,6 +148,6 @@ global.test = new Helper()
 
 console.info('  Available globals:')
 console.info('    assert, expect, should,')
-console.info('    Browser,')
+console.info('    Browser, request,')
 console.info('    test: test.db, test.dump(), test.model(), test.module(), test.browser()')
 console.info('--== Done ==--\n')

@@ -16,7 +16,7 @@ module.exports = function(grunt) {
           file: 'server.js',
           args: [],
           nodeArgs: ['--debug'],
-          ignoredFiles: ['README.md', 'node_modules/**', '.git/**'],
+          ignoredFiles: ['README.md', 'test/**', 'node_modules/**', '.git/**'],
           //watchedExtensions: ['js'],
           //watchedFolders: ['test', 'tasks'],
           delayTime: 1,
@@ -138,7 +138,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-nodemon')
   grunt.loadNpmTasks('grunt-shell-spawn')
 
-  // Dynamic task to run the server with a given env
+  /**
+   * Dynamic task to run the server with a given env
+   * @param  {string} env (default: prod) NODE_ENV
+   */
   grunt.registerTask('server', function (env) {
     if (
       !grunt.file.exists(grunt.config('nodemon.server.options.file'))
@@ -148,47 +151,49 @@ module.exports = function(grunt) {
     }
 
     if (env) {
-      grunt.config('nodemon.server.options.env.NODE_ENV', env || dev)
+      grunt.config('nodemon.server.options.env.NODE_ENV', env || 'prod')
     }
 
     grunt.task.run('nodemon:server')
   })
 
-  // Development task to Lint and run unit tests on file change.
-  grunt.registerTask('develop-check', ['watch:check'])
-  // Development task to compile client files on change.
-  grunt.registerTask('develop-client', ['watch:client'])
-  // Dynamic develop task for running server files. Defaults to server.js
-  grunt.registerTask('develop', function (file) {
-    if (
-      !grunt.file.exists(grunt.config('nodemon.server.options.file'))
-      && grunt.file.exists('server-simple.js')
-    ) {
-      file = file || 'server-simple.js'
+  /**
+   * Development tasks. Ideally run during development; have two terminal
+   * windows open - one running develop:check, and one running develop.
+   * Both will restart when files change.
+   *
+   * develop:check - Lints project files and runs all tests.
+   * develop:client - Builds all client files.
+   *
+   * @param  {string} env (default: dev) 'client'|'check'|NODE_ENV
+   */
+  grunt.registerTask('develop', function (env) {
+    if (env === 'check' || env === 'client') {
+      return grunt.task.run('watch:' + env)
+    } else {
+      grunt.task.run('server:' + (env || 'dev'))
     }
-
-    if (file === 'check' || file === 'client') {
-      return grunt.task.run(['develop-' + file])
-    } else if (file) {
-      grunt.config('nodemon.server.options.file', file)
-    }
-
-    grunt.task.run('nodemon:server')
   })
 
-  // Lints, runs tests, and builds client files.
+  /**
+   * Lints, runs tests, and builds client files.
+   * Also is the default task.
+   */
   grunt.registerTask('build', ['jshint', 'mocha:all', 'uglify', 'sass:build'])
-
-  // Default task(s).
   grunt.registerTask('default', 'build')
 
-  // Dynamic alias task to mocha. Run individual tests with: grunt test:<file>
+  /**
+   * Runs unit tests - All by default, or an individual test file can be specified.
+   * @param  {string} file (optional) Path to individual test to run
+   */
   grunt.registerTask('test', function (file) {
     grunt.config('mocha.test.src', file || grunt.config('mocha.test.src'))
     grunt.task.run('mocha:test')
   })
 
-  // Mocha test runner.
+  /**
+   * Mocha test runner task.
+   */
   grunt.registerMultiTask('mocha', 'Runs the mocha test suite', function() {
     var src = this.data.src || 'test/*'
       , options = this.data.options || {}
