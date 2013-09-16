@@ -1,3 +1,10 @@
+/**
+ * Universal bootstrap / helpers for unit tests.
+ *
+ * WARNING: Do not load this module unless you are actually running unit tests,
+ *          as it modifies the global scope!
+ */
+
 // Bootstrap any objects or configuration that needs to be performed for each test.
 console.info('\n--== Bootstrapping Tests ==--')
 
@@ -6,8 +13,9 @@ process.env.NODE_ENV = 'test'
 var util = require('util')
   , path = require('path')
   , nconf = require('nconf')
-  , common = require('../modules/app/common')
-  , App = require('../modules/app').App
+  , app = require('..')
+  , App = app.App
+  , common = app.common
 
 // Chai assertions
 var chai = require('chai')
@@ -18,12 +26,11 @@ global.should = chai.should()
 // --
 
 // Zombie browser (global class for custom instances)
-var Browser = require('zombie')
-global.Browser = Browser
+var Browser = global.Browser = require('zombie')
 // --
 
 // request
-global.request = require('request')
+var request = global.request = require('request')
 // --
 
 
@@ -34,7 +41,7 @@ var Helper = function () {
   // can have access to the configuration
   this.initializeConfig({
     'node-env': process.env.NODE_ENV
-  }, path.resolve(__dirname + '/../'))
+  }, path.resolve(__dirname + '/../../../'))
 
   this.db = {
     connect: function (callback) { callback(new Error('Not implemented')) },
@@ -130,17 +137,39 @@ Helper.prototype.browser = function (options) {
     options.headers['Content-Type'] = 'application/json'
   }
 
-  this.browser = new Browser(options)
+  this._browser = new Browser(options)
 
   // make sure the server is running (autorun?)
-  this.browser.visit('/', function (e, browser, status) {
+  this._browser.visit('/', function (e, browser, status) {
     if (e) {
       console.error('Could not reach local server at ' + options.site + '\nPlease make sure it is running!')
       throw(e)
     }
   }.bind(this))
 
-  return this.browser
+  this._browser.json = {}
+  this._browser.json.request = function (uri, options, callback) {
+    var params = request.initParams(uri, options, callback)
+    params.options.json = true
+    params.uri = params.options.uri = this._browser.site + (params.uri || null)
+    return request(params.uri, params.options, params.callback)
+  }.bind(this)
+  this._browser.json.get = this._browser.json.request
+  this._browser.json.post = function (uri, options, callback) {
+    options = common.merge({ method: 'POST' }, options)
+    return this._browser.json.request(uri, options, callback)
+  }
+  this._browser.json.put = function (uri, options, callback) {
+    options = common.merge({ method: 'PUT' }, options)
+    return this._browser.json.request(uri, options, callback)
+  }
+  this._browser.json.delete = function (uri, options, callback) {
+    options = common.merge({ method: 'DELETE' }, options)
+    return this._browser.json.request(uri, options, callback)
+  }
+
+
+  return this._browser
 }
 
 

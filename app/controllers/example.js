@@ -11,7 +11,7 @@ var logger = require('log4js').getLogger('[ctrl] example')
 module.exports = function (app, options, context) {
   'use strict';
   //var logger = context.getLogger('[ctrl] example')
-  logger.info('Example controller init: ' + (typeof options) + ': ' + (typeof context))
+  logger.info('Example controller init')
 
   app.get('/', function (req, res) {
     res.render('example/index', {

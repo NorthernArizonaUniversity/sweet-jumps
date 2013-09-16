@@ -11,7 +11,7 @@ var logger = require('log4js').getLogger('[mdlwr] example')
 module.exports = function (app, options, context) {
   'use strict';
   //var logger = context.getLogger('[ctrl] example')
-  logger.info('Example middleware init: ' + (typeof options) + ': ' + (typeof context))
+  logger.info('Example middleware init')
 
   app.use(function (req, res, next) {
     logger.info('Example middleware reporting in...')

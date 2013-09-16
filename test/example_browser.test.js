@@ -1,7 +1,7 @@
 /**
  * See http://zombie.labnotes.org/API for available browser functions.
  * browser is good for standard functional tests, but if you need to test
- * JSON services, request is better suited.
+ * JSON services, use browser.json (see example_rest_api_browser.test.js)
  */
 var browser = test.browser()
 
@@ -19,14 +19,6 @@ describe('Example Browser Suite', function() {
         should.fail(e)
         done()
       })
-
-    // TODO: Implement
-    browser.getJson('/api/derp', function (err, data) {
-
-    })
-    browser.postJson('/api/derp', { id: 'herp', title: 'lulwut' }, function (err, data) {
-
-    })
   })
 })
 
