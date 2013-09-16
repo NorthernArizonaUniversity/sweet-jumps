@@ -6,7 +6,6 @@
   "port":        8080,
   "secret":      "cc8e955e-041c-4bf7-a7df-6f3fded3d85f",
   "session":     true,
-  "view-engine": "jade",
   "logger": {
     "appenders": [
       { "type": "console" }

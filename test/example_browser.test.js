@@ -19,6 +19,14 @@ describe('Example Browser Suite', function() {
         should.fail(e)
         done()
       })
+
+    // TODO: Implement
+    browser.getJson('/api/derp', function (err, data) {
+
+    })
+    browser.postJson('/api/derp', { id: 'herp', title: 'lulwut' }, function (err, data) {
+
+    })
   })
 })
 

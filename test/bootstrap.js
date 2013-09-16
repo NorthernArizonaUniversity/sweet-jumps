@@ -48,6 +48,7 @@ Helper.prototype.emit = function () {} // stub
 Helper.prototype.normalizeEnv = App.prototype.normalizeEnv
 Helper.prototype.initializeConfig = App.prototype.initializeConfig
 Helper.prototype.getModule = App.prototype.getModule
+Helper.prototype.getModel = App.prototype.getModel
 Helper.prototype.dump = common.dump
 
 // Modules

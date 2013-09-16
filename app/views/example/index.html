@@ -1,0 +1,24 @@
+{% extends "../layout.html" %}
+
+{% block content %}
+  <h1>{{message}}</h1>
+  <p>This is an example page.</p>
+
+  <h2>Configuration</h2>
+  <p>Template variables should be explicitly declared in each route,
+    but for convenience, the config / app settings can be accessed using
+    either the config global (all configuration), or the settings global
+    (just app settings.)
+  <h3>Using config</h3>
+  <ul>
+    {% for key, value in config.app %}
+      <li>{{key}}: {{value}}</li>
+    {% endfor %}
+  </ul>
+  <h3>Using settings</h3>
+  <ul>
+    {% for key, value in settings %}
+      <li>{{key}}: {{value}}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

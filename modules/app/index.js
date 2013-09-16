@@ -7,6 +7,7 @@ var util = require('util')
   , path = require('path')
   , nconf = require('nconf')
   , log4js = require('log4js')
+  , swig = require('swig')
   , common = require('./common')
   , PluginManager = require('plugin-manager').PluginManager
   , xmlBodyParser = require('../xml-body-parser').xmlBodyParser
@@ -88,6 +89,7 @@ App.prototype.start = function () {
   if (!this.ready) {
     this.initializePlugins()  // load plugins first so that they can hook events
     this.initializeModels()
+    this.initializeViews()
     this.initializeApp()
     this.initializeMiddleware()
     this.initializeControllers()
@@ -226,8 +228,6 @@ App.prototype.initializeApp = function (app) {
 
   // all environments
   app.set('title', this.config.get('app:title') || '[EWT Node.js Project]')
-  app.set('views', this.config.get('path:app') + '/views')
-  app.set('view engine', this.config.get('view-engine') || 'jade')
   app.use(express.compress())
   app.use(express.favicon())
   app.use(express.static(this.config.get('path:static')))
@@ -244,9 +244,7 @@ App.prototype.initializeApp = function (app) {
   app.use(express.methodOverride());
 
   // Add the app config to locals
-  if (this.config.get('app')) {
-    app.locals(this.config.get('app'))
-  }
+  app.locals(this.config.get('app') || {})
 
   // Development or test only
   if (app.get('env') === 'development' || app.get('env') === 'test') {
@@ -256,7 +254,6 @@ App.prototype.initializeApp = function (app) {
 
   // Production only
   if (app.get('env') === 'production') {
-    app.enable('cache views')
     app.use(express.errorHandler({ dumpExceptions: true }))
   }
 
@@ -282,6 +279,40 @@ App.prototype.initializeApp = function (app) {
 }
 
 
+App.prototype.initializeViews = function (app) {
+  app = app || this.app
+  var settings = this.config.get('app') || {}
+
+  // Global view rendering
+  swig.setDefaults({
+    autoescape: true,
+    cache: false, // let express handle caching
+    locals: { config: this.config.get() || {} }
+  })
+
+  app.engine('html', swig.renderFile)
+  app.set('view engine', this.config.get('view-engine') || 'html')
+  app.set('views', this.config.get('path:app') + '/views')
+
+  for (var key in settings) {
+    if (settings.hasOwnProperty(key)) {
+      app.set(key, settings[key])
+    }
+  }
+
+  // Development or test only (do not cache views)
+  if (app.get('env') === 'development' || app.get('env') === 'test') {
+    app.set('view cache', false)
+  }
+
+  // Production only (cache views)
+  if (app.get('env') === 'production') {
+    app.enable('cache views')
+    app.set('view cache', true)
+  }
+
+  this.emit('views-initialized', app);
+}
 
 
 /**
@@ -400,6 +431,17 @@ App.prototype.initializePlugins = function () {
 App.prototype.getModule = function (module) {
   if (module && module.length) {
     return require(this.config.get('path:modules') + '/' + module)
+  }
+  return null
+}
+
+
+/**
+ * Loads and returns a global level model (handy shortcut)
+ */
+App.prototype.getModel = function (model) {
+  if (model && model.length) {
+    return require(this.config.get('path:app') + '/models/' + model.toLowerCase())
   }
   return null
 }

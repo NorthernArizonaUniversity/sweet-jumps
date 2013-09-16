@@ -37,24 +37,25 @@ Quick Start
 
 1. Create a new Git repository: `git init`
 2. Add the boilerplate as an upstream remote: `git remote add upstream git@bitbucket.org:nauewt/node.js-webapp-boilerplate.git`
-3. Pull the boilerplate down: `git pull upstream`
+3. Pull the boilerplate down: `git pull upstream master`
 4. Install dependencies: `npm install`
 5. Choose a server.js template version from the 3 available in the project root. Rename that file to `server.js` and delete the other 2.
 6. If you are extending the App class to customize functionality, consider moving the class to its own file in the root folder.
-7. Double check the json files in config and customize as needed. In particular, pay attention to the MongoDB and port settings. By default, the devlopment.json file extends and overrides the values in the production.json file, so check both.
+7. Double check the json files in config and customize as needed. In particular, pay attention to the MongoDB and port settings. By default, the devlopment.json file extends and overrides the values in the production.json file, so check both. You should at least have production.json, development.json, and test.json.
   - **Note**: the config file used at runtime is decided by NODE_ENV (usually either 'dev' or 'prod'). To set this for development, either pass it as a command line parameter `node server.js --node-env=dev` or as an environment variable `NODE_ENV=dev node server.js`. Grunt handles this for you during development.
   - You may want to, in your project repository, move the existing config files to .sample.json and make local, ignored copies of them so that passwords, paths, or secrets are not stored in the repository.
 8. If you don't already have Grunt on your system, install it: `npm install -g grunt-cli`
 9. Use Grunt during development. Several Grunt tasks are included to ease development, provide linting, unit testing, asset management etc. In particular, during development you should have 2 or 3 terminal windows open running the following Grunt tasks.
-  - "grunt develop": Starts the node server.js in dev mode and watches for changes (assumes you have a server.js, if you need to run another file, add it after develop: "grunt develop:server-simple.js"). You should run at least this tast; it replaces the need to run with supervisor.
-  - "grunt develop-check": Watches for server file changes and lints them.
-  - "grunt develop-client": Watches client files for changes and rebuilds if necessary
-10. Start writing routes/controllers, middleware, models, modules, or plugins as needed. Examples are provided for each. CoffeeScript is included by default, so feel free to use it.
+  - "grunt develop" - Starts the node server.js in dev mode and watches for changes (assumes you have a server.js, if you need to run in a different environment, add it after develop: "grunt develop:test"). You should run at least this task; it replaces the need to run with supervisor.
+  - "grunt develop:check" - Watches for server file changes and lints them.
+  - "grunt develop:client" - Watches client files for changes and rebuilds if necessary
+10. Views are written using the Swig templating engine by default (http://paularmstrong.github.io/swig/docs). If you would like to use a different engine, override the App::initializeViews() method.
+11. Start writing routes/controllers, middleware, models, modules, or plugins as needed. Examples are provided for each. CoffeeScript is included by default, so feel free to use it.
 
 
 Configuration
 -------------
-Configuration is handled using JSON files in the application's config directory. By default the application will load the JSON file corresponding to the environment being used (usually either 'dev/development' or 'prod/production', but could be 'test', 'stage', etc). The file loaded can "extend" a different config file and override values specific to the environment without repeating values. Usually, and by default, development.json extends production.json. Set all configuration in production and if you need specific settings for development, override just those settings in development.json.
+Configuration is handled using JSON files in the application's config directory. By default the application will load the JSON file corresponding to the environment being used (usually either 'dev', 'development', 'prod', or 'production', but could be 'test', 'stage', etc). The file loaded can "extend" a different config file and override values specific to the environment without repeating values. Usually, and by default, development.json and test.json both extend production.json. Set all configuration in production and if you need specific settings for development, override just those settings in development.json.
 
 ### Configuration keys:
 
@@ -64,7 +65,6 @@ Configuration is handled using JSON files in the application's config directory.
 - parse-xml - <boolean> If true, the server will accept and parse requests with XML post bodies if the "Content-Type:application-xml" header is sent.
 - session - <boolean> If true a session will be initialized for requests.
 - secret - <string> Secret key used for secure sessions, just set it to some unique value.
-- view-engine - <string> The view engine to use with express, 'jade' by default.
 - mongodb - <object> MongoDB connection config. Generally will have just one key "uri", which contains a mongodb:// connection string. Other keys as used by Mongoose.
 - logger - <object> Logger (Log4js) configuration. By default, just used console, but can also be set to use files in multiple configurations. See https://github.com/nomiddlename/log4js-node for more details.
 
@@ -81,11 +81,11 @@ Included Components
 
 - CoffeeScript - http://coffeescript.org/
 - Express - http://expressjs.com/
-- Jade (views) - https://npmjs.org/package/jade
+- Swig (views) - http://paularmstrong.github.io/swig
   - Alternatives:
     - Embedded Javascript templates (ejs) - https://npmjs.org/package/ejs
     - Handlebars - https://npmjs.org/package/handlebars
-    - Twig - https://npmjs.org/package/twig
+    - Jade - https://npmjs.org/package/jade
 - nconf (configuration) - https://npmjs.org/package/nconf
 - connect-mongo (session store) - https://npmjs.org/package/connect-mongo
 - Mongoose (models) - http://mongoosejs.com/
