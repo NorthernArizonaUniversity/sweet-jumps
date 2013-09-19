@@ -1,7 +1,7 @@
-Node.js Webapp Boilerplate
+Sweet Jumps - A Node.js Webapp Boilerplate
 ==========================
 
-NAUEWT unified boilerplate / skeleton for Node.js web applications for consistency of approach and maintenance.
+Boilerplate / framework for Node.js web applications to enable consistency of approach and maintenance.
 
 Structure
 ---------
