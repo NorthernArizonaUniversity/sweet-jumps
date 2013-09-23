@@ -72,10 +72,8 @@ App.prototype.normalizeEnv = function (env) {
   if (env !== process.env.NODE_ENV) {
     process.env.NODE_ENV = env
     this.app.set('env', env)
-    this.config.overrides({
-      'node-env': env, // does nothing if node-env came in on argv
-      'env': env
-    })
+    this.config.set('node-env', env)
+    this.config.set('env', env)
   }
 
   return env
