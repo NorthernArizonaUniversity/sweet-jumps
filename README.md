@@ -109,6 +109,4 @@ Included Components
 Roadmap
 -------
 
-1. grunt-init, a cli tast to stub out components.
-2. Convert entire boilerplate to grunt-init template.
-3. Convert main application code to CoffeScript.
+1. Convert main application code to CoffeScript.
