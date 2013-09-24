@@ -37,8 +37,11 @@ Quick Start
 -----------
 
 1. Create a new Git repository: `git init`
-2. Add the boilerplate as an upstream remote: `git remote add upstream git@bitbucket.org:nauewt/node.js-webapp-boilerplate.git`
+2. Add the boilerplate as an upstream remote: `git remote add upstream git@bitbucket.org:nauewt/sweet-jumps.git`
 3. Pull the boilerplate down: `git pull upstream master`
+    - (Optional) Create a new remote repository at your favorite Git hosting site and add it as your origin: `git remote add origin ssh://git@bitbucket.org/myaccount/large-talons.git'
+    - Push your project to your new origin: `git push -u origin --all`
+    - If you later want to grab upgrades from Sweet Jumps, fetch and merge from upstream: `git fetch upstream -v; git merge upstream/master`
 4. Install dependencies: `npm install`
 5. Choose a server.js template version from the 3 available in the project root. Rename that file to `server.js` and delete the other 2.
 6. If you are extending the App class to customize functionality, consider moving the class to its own file in the root folder.
