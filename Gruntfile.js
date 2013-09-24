@@ -15,13 +15,13 @@ module.exports = function(grunt) {
         options: {
           file: 'server.js',
           args: [],
-          nodeArgs: ['--debug'],
+          nodeArgs: [],
           ignoredFiles: ['README.md', 'test/**', 'node_modules/**', '.git/**'],
           //watchedExtensions: ['js'],
           //watchedFolders: ['test', 'tasks'],
           delayTime: 1,
           env: {
-            NODE_ENV: 'dev'
+            NODE_ENV: 'prod'
           },
           cwd: __dirname,
           exec: 'node'
@@ -152,6 +152,10 @@ module.exports = function(grunt) {
 
     if (env) {
       grunt.config('nodemon.server.options.env.NODE_ENV', env || 'prod')
+
+      if (env.match(/^dev/i)) {
+        grunt.config('nodemon.server.options.nodeArgs', ['--debug'])
+      }
     }
 
     grunt.task.run('nodemon:server')
