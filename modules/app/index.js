@@ -448,16 +448,21 @@ App.prototype.getModel = function (model) {
  * If a mountpoint is specified, the sub-app will be mounted, and the views
  * location will have the mountpoint appended.
  *
+ * @param  {express app} parent (optional) Parent app
  * @param  {string} mountpoint (optional)
  * @return {express app}
  */
-App.prototype.createSubapp = function (mountpoint) {
+App.prototype.createSubapp = function (parent, mountpoint) {
   var subapp = express()
   this.initializeViews(subapp)
 
+  if (typeof parent === 'string') {
+    mountpoint = parent
+    parent = this.app
+  }
   if (typeof mountpoint === 'string') {
     subapp.set('views', subapp.get('views') + mountpoint)
-    this.app.use(mountpoint, subapp)
+    parent.use(mountpoint, subapp)
   }
 
   return subapp
