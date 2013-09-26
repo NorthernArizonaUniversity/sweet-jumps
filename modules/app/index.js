@@ -461,7 +461,7 @@ App.prototype.createSubapp = function (parent, mountpoint) {
     parent = this.app
   }
   if (typeof mountpoint === 'string') {
-    subapp.set('views', subapp.get('views') + mountpoint)
+    subapp.set('views', parent.get('views') + mountpoint)
     parent.use(mountpoint, subapp)
   }
 
