@@ -226,6 +226,7 @@ App.prototype.initializeApp = function (app) {
 
   // all environments
   app.set('title', this.config.get('app:title') || '[EWT Node.js Project]')
+  app.use(app.router)
   app.use(express.compress())
   app.use(express.favicon())
   app.use(express.static(this.config.get('path:static')))
@@ -269,9 +270,6 @@ App.prototype.initializeApp = function (app) {
     app.use(express.cookieParser(sessionOpts.secret || null))
     app.use(express.session(sessionOpts))
   }
-
-  // Init Router
-  app.use(app.router)
 
   this.emit('app-initialized', app);
 }
@@ -442,6 +440,27 @@ App.prototype.getModel = function (model) {
     return require(this.config.get('path:app') + '/models/' + model.toLowerCase())
   }
   return null
+}
+
+
+/**
+ * Creates an Express sub-app and initializes it for use with views etc.
+ * If a mountpoint is specified, the sub-app will be mounted, and the views
+ * location will have the mountpoint appended.
+ *
+ * @param  {string} mountpoint (optional)
+ * @return {express app}
+ */
+App.prototype.createSubapp = function (mountpoint) {
+  var subapp = express()
+  this.initializeViews(subapp)
+
+  if (typeof mountpoint === 'string') {
+    subapp.set('views', subapp.get('views') + mountpoint)
+    this.app.use(mountpoint, subapp)
+  }
+
+  return subapp
 }
 
 
