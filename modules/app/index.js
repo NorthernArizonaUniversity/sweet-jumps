@@ -224,6 +224,9 @@ App.prototype.initializeApp = function (app) {
   // Initialize Express
   app = app || this.app
 
+  // optional
+  this.initializeSession(app)
+
   // all environments
   app.set('title', this.config.get('app:title') || '[EWT Node.js Project]')
   app.use(app.router)
@@ -256,7 +259,11 @@ App.prototype.initializeApp = function (app) {
     app.use(express.errorHandler({ dumpExceptions: true }))
   }
 
-  // Init Session (optional)
+  this.emit('app-initialized', app);
+}
+
+
+App.prototype.initializeSession = function (app) {
   if (this.config.get('session') !== false) {
     var sessionOpts = { secret: this.config.get('secret') || null }
     if (this.config.get('mongodb')) {
@@ -270,8 +277,6 @@ App.prototype.initializeApp = function (app) {
     app.use(express.cookieParser(sessionOpts.secret || null))
     app.use(express.session(sessionOpts))
   }
-
-  this.emit('app-initialized', app);
 }
 
 
