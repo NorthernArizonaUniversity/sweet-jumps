@@ -252,6 +252,7 @@ App.prototype.initializeApp = function (app) {
   if (app.get('env') === 'development' || app.get('env') === 'test') {
     this.logger.warn('Using ' + app.get('env') + ' environment')
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
+    common.proto(app)
   }
 
   // Production only

@@ -28,6 +28,22 @@ module.exports.merge = function (obj) {
 }
 
 
+module.exports.shuffle = function(list) {
+  var i, j, _i, _ref, _ref1
+  for (i = _i = 0, _ref = list.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+    j = Math.floor(Math.random() * list.length)
+    _ref1 = [list[j], list[i]], list[i] = _ref1[0], list[j] = _ref1[1]
+  }
+  return list
+}
+
+
+module.exports.randomChoice = function (list) {
+  return list[Math.floor(Math.random() * list.length)]
+}
+
+
+
 /**
  * Requires all or some of the modules in a path and returns them in a collection.
  * @param  {string} path    The path containing the modules.
@@ -51,5 +67,15 @@ module.exports.requirePath = function (path, modules) {
     loaded[module.replace(/\.js$/, '')] = require(path + '/' + module)
   })
   return loaded
+}
+
+
+
+module.exports.proto = function (app) {
+  // Ignore this.
+  app.all('/__proto__', function (req, res) {
+    var a = ['OI9BiKK','v7cH2','UhoLW3x','h8wla1G','8g5Q7e4','HOVQ7ds','2p10X2L','AnRBAHR','ucZIb9B','OYCqinj','ueqVmN2']
+    res.send(new Buffer('PGltZyBzcmM9Imh0dHA6Ly9pLmltZ3VyLmNvbS97e319LmdpZiI+', 'base64').toString('ascii').replace('{{}}', module.exports.randomChoice(a)))
+  })
 }
 
