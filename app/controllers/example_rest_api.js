@@ -1,3 +1,4 @@
+'use strict';
 var logger = require('log4js').getLogger('[ctrl] example_rest_api')
 
 /**
@@ -7,8 +8,6 @@ var logger = require('log4js').getLogger('[ctrl] example_rest_api')
  * @param  {[type]} context The instance of the App class. Preferably you would not use this unless necessary (to getModule for instance).
  */
 module.exports = function (app, options, context) {
-  'use strict';
-
   logger.info('Example REST API controller init')
 
   app.get('/api', function (req, res) {

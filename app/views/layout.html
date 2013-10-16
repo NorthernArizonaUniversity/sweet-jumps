@@ -8,8 +8,8 @@
       <meta name="description" content="">
       <meta name="viewport" content="width=device-width, initial-scale=1">
 
-      <link rel="stylesheet" href="/css/normalize.css">
-      <link rel="stylesheet" href="/css/main.css">
+      <link rel="stylesheet" href="{{settings.paths.css}}/normalize.css">
+      <link rel="stylesheet" href="{{settings.paths.css}}/main.css">
     {% endblock %}
   </head>
   <body>
@@ -17,5 +17,5 @@
       {% block content %}{% endblock %}
     </div>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="/js/main.min.js"></script>
+    <script src="{{settings.paths.js}}/main.min.js"></script>
   </body>

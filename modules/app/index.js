@@ -28,6 +28,7 @@ var App = function (options) {
   this.app = express()
   this.initializeConfig(options)
   this.initializeLogger()
+  this.initializeBasePath()
 
   // Ready to initialize and run
   if (this.config.get('auto-start')) {
@@ -107,7 +108,9 @@ App.prototype.start = function () {
  */
 App.prototype.listen = function (port) {
   port = port || this.config.get('port') || 80
-  this.app.listen(port)
+
+  var app = this.rootApp || this.app
+  app.listen(port)
 
   this.logger.info('Listening for connections on port ' + port)
   this.emit('listen')
@@ -216,6 +219,20 @@ App.prototype.setLoggerLevel = function (level) {
   }
 }
 
+/**
+ * If a base-path is set in config, this function creates a subapp which is mounted
+ * to that base-path, and essentially hijacks all the functions of the root application.
+ */
+App.prototype.initializeBasePath = function () {
+  if (this.config.get('base-path') && /^\//.test(this.config.get('base-path'))) {
+    this.rootApp = this.app
+    this.app = express()
+    this.rootApp.use(this.config.get('base-path'), this.app)
+
+    this.logger.info('Application mounted at base path: ', this.app.path())
+  }
+}
+
 
 /**
  * Configures the main express app based on configuration
@@ -284,17 +301,29 @@ App.prototype.initializeSession = function (app) {
 App.prototype.initializeViews = function (app) {
   app = app || this.app
   var settings = this.config.get('app') || {}
+    , config = this.config.get() || {}
+
+  config['base-path'] = config['base-path'] || ''
+
 
   // Global view rendering
   swig.setDefaults({
     autoescape: true,
     cache: false, // let express handle caching
-    locals: { config: this.config.get() || {} }
+    locals: {
+      config: config
+    }
   })
 
   app.engine('html', swig.renderFile)
   app.set('view engine', this.config.get('view-engine') || 'html')
   app.set('views', this.config.get('path:app') + '/views')
+  app.set('base-path', config['base-path'])
+  app.set('paths', {
+    base: config['base-path'],
+    css: config['base-path'] + '/css',
+    js: config['base-path'] + '/js'
+  })
 
   for (var key in settings) {
     if (settings.hasOwnProperty(key)) {
