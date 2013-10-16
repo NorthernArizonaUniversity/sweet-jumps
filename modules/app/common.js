@@ -6,8 +6,8 @@
 module.exports.dump = function (obj, depth, log) {
   var util = require('util')
 
-  log = log || util.debug;
-  log(util.inspect(obj, false, (depth || 1), true));
+  log = log || util.debug
+  log(util.inspect(obj, { depth: (depth || 1), colors: true }))
 }
 
 
@@ -16,15 +16,15 @@ module.exports.dump = function (obj, depth, log) {
  * Object properties are overwritten by each subsequent object with the same property.
  */
 module.exports.merge = function (obj) {
-  var sources = Array.prototype.slice.call(arguments, 1);
+  var sources = Array.prototype.slice.call(arguments, 1)
   for (var i = 0; i < sources.length; i++) {
     for (var key in (sources[i] || {})) {
       if (sources[i].hasOwnProperty(key)) {
-        obj[key] = sources[i][key];
+        obj[key] = sources[i][key]
       }
     }
   }
-  return obj;
+  return obj
 }
 
 
