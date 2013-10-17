@@ -6,7 +6,7 @@ var logger = require('log4js').getLogger('[mdlwr] example')
  * Example middleware initialization function.
  * @param  {express} app    The global express app.
  * @param  {object} options Configuration if it exists
- * @param  {[type]} context The instance of the App class. Preferably you would not use this unless necessary (to getModule for instance).
+ * @param  {[type]} context The instance of the SweetJumps class. Preferably you would not use this unless necessary (to getModule for instance).
  */
 module.exports = function (app, options, context) {
   'use strict';

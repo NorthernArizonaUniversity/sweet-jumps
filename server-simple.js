@@ -2,6 +2,6 @@
 
 // If you do not wish to customize the app core behavior or hook initilization events
 // simply create an app instance and start or auto-start it:
-var App = require('./modules/app').App
-new App()
+var SweetJumps = require('./modules/sweet-jumps').SweetJumps
+new SweetJumps()
 // app.start() // if necessary

@@ -6,8 +6,8 @@
  * and start the app manually.
  */
 
-var App = require('./modules/app').App
-  , app = new App({ 'auto-start': false })
+var SweetJumps = require('./modules/sweet-jumps').SweetJumps
+  , app = new SweetJumps({ 'auto-start': false })
 
 // Hook an init event (see README.md for all events)
 app.on('controllers-loaded', function (controllers) {
@@ -17,7 +17,7 @@ app.on('controllers-loaded', function (controllers) {
 
 // Override a core function completely
 // (events are preferred, only do this if you really need to, because this is destructive)
-App.prototype.initializeModels = function () {
+SweetJumps.prototype.initializeModels = function () {
   this.logger.warn('I have completely overridden model initialization!')
   this.emit('models-initialized');
 }

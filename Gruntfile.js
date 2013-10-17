@@ -205,7 +205,7 @@ module.exports = function(grunt) {
                   , '--compilers coffee:coffee-script'
                   , '--reporter ' + (options.reporter || 'spec')
                   , '--require coffee-script'
-                  , '--require modules/app/test'
+                  , '--require modules/sweet-jumps/test'
                   , '--colors']
       , e = require('child_process').exec
       , done = this.async()

@@ -1,3 +1,6 @@
-.idea
-.sass-cache
 node_modules
+npm-debug.log
+config/development.json
+config/production.json
+config/test.json
+.sass-cache

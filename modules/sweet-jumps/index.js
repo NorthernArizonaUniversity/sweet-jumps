@@ -5,6 +5,7 @@ var util = require('util')
   , events = require('events')
   , express = require('express')
   , path = require('path')
+  , fs = require('fs')
   , nconf = require('nconf')
   , log4js = require('log4js')
   , swig = require('swig')
@@ -17,9 +18,9 @@ var util = require('util')
 /**
  * Application Class
  * @param  {object} config Application config overrides
- * @return {function}      App class function
+ * @return {function}      SweetJumps class function
  */
-var App = function (options) {
+var SweetJumps = function (options) {
   events.EventEmitter.call(this)
 
   options = this.normalizeOptions(options)
@@ -35,14 +36,14 @@ var App = function (options) {
     this.start()
   }
 }
-// App extends EventEmitter
-util.inherits(App, events.EventEmitter)
+// SweetJumps extends EventEmitter
+util.inherits(SweetJumps, events.EventEmitter)
 
 
 /**
  * Normalizes environment variables and passed in option overrides.
  */
-App.prototype.normalizeOptions = function (options) {
+SweetJumps.prototype.normalizeOptions = function (options) {
   // Normalize option overrides (Prioritize env over passed in options)
   options = options || {}
 
@@ -61,7 +62,7 @@ App.prototype.normalizeOptions = function (options) {
  * Normalizes the environment name (ie. prod -> production)
  * @param {string} env optional
  */
-App.prototype.normalizeEnv = function (env) {
+SweetJumps.prototype.normalizeEnv = function (env) {
   env = env || (this.config && this.config.get('node-env')) || 'production'
 
   if (env.match(/^prod/i)) {
@@ -84,14 +85,14 @@ App.prototype.normalizeEnv = function (env) {
 /**
  * Initializes all app components and starts listening for connections
  */
-App.prototype.start = function () {
+SweetJumps.prototype.start = function () {
   if (!this.ready) {
     this.initializePlugins()  // load plugins first so that they can hook events
     this.initializeModels()
-    this.initializeViews()
     this.initializeApp()
     this.initializeMiddleware()
     this.initializeControllers()
+    this.initializeErrorHandler()
 
     this.logger.info('Application ready to start.')
     this.ready = true
@@ -106,7 +107,7 @@ App.prototype.start = function () {
  * Starts listening for connections
  * @param  {int} port Override listening port (defaults to 80 or config)
  */
-App.prototype.listen = function (port) {
+SweetJumps.prototype.listen = function (port) {
   port = port || this.config.get('port') || 80
 
   var app = this.rootApp || this.app
@@ -121,7 +122,7 @@ App.prototype.listen = function (port) {
  * Initializes app configuration with optional overrides.
  * @param  {object} overrides overrides config values that may be set in config files
  */
-App.prototype.initializeConfig = function (overrides, root) {
+SweetJumps.prototype.initializeConfig = function (overrides, root) {
   root = root || path.resolve(__dirname + '/../../')
   // Initialize nconf
   // Option priority: Command line, Environment, constructor options, config file, defaults
@@ -134,7 +135,11 @@ App.prototype.initializeConfig = function (overrides, root) {
   this.normalizeEnv()
 
   // Load environment config
-  this.config.file({ file: root + '/config/' + process.env.NODE_ENV + '.json' })
+  var file = root + '/config/' + process.env.NODE_ENV + '.json'
+  if (!fs.existsSync(file)) {
+    file = root + '/config/production.json'
+  }
+  this.config.file({ file: file })
 
   // If the environment config extends a different config file, load that as well
   if (this.config.get('config-extends')) {
@@ -167,11 +172,11 @@ App.prototype.initializeConfig = function (overrides, root) {
  * Use either logger.trace(msg), logger.info(msg)...
  * or logger.log('INFO', msg)
  */
-App.prototype.initializeLogger = function () {
+SweetJumps.prototype.initializeLogger = function () {
   if (log4js) {
     log4js.configure(this.config.get('logger'))
 
-    this.logger = log4js.getLogger('App')
+    this.logger = log4js.getLogger('SweetJumps')
     this.setLoggerLevel(this.config.get('logger:level'))
   } else {
     // Simulate the log4js interface with console
@@ -198,7 +203,7 @@ App.prototype.initializeLogger = function () {
  * @param  {[type]} category [description]
  * @return {[type]}          [description]
  */
-App.prototype.getLogger = function (category) {
+SweetJumps.prototype.getLogger = function (category) {
   if (log4js) {
     return log4js.getLogger(category)
   } else {
@@ -209,7 +214,7 @@ App.prototype.getLogger = function (category) {
 /**
  * Changes logger level if available.
  */
-App.prototype.setLoggerLevel = function (level) {
+SweetJumps.prototype.setLoggerLevel = function (level) {
   level = level || 'ALL'
   if (log4js) {
     log4js.setGlobalLogLevel(level)
@@ -223,7 +228,7 @@ App.prototype.setLoggerLevel = function (level) {
  * If a base-path is set in config, this function creates a subapp which is mounted
  * to that base-path, and essentially hijacks all the functions of the root application.
  */
-App.prototype.initializeBasePath = function () {
+SweetJumps.prototype.initializeBasePath = function () {
   if (this.config.get('base-path') && /^\//.test(this.config.get('base-path'))) {
     this.rootApp = this.app
     this.app = express()
@@ -237,51 +242,106 @@ App.prototype.initializeBasePath = function () {
 /**
  * Configures the main express app based on configuration
  */
-App.prototype.initializeApp = function (app) {
+SweetJumps.prototype.initializeApp = function (app) {
   // Initialize Express
   app = app || this.app
 
   // optional
-  this.initializeSession(app)
+  this.useSession(app)
 
-  // all environments
+  // Import settings from config / init views
   app.set('title', this.config.get('app:title') || '[EWT Node.js Project]')
-  app.use(app.router)
-  app.use(express.compress())
-  app.use(express.favicon())
-  app.use(express.static(this.config.get('path:static')))
+  app.locals(this.config.get('app') || {})
+  this.useViews(app)
+
+  // Access log
   if (this.config.get('access-log')) {
     app.use(log4js
       ? log4js.connectLogger(this.getLogger('express'), { level: 'auto' })
       : express.logger()
     )
   }
+
+  // Static resources
+  app.use(express.compress())
+  app.use(express.favicon())
+  app.use(express.static(this.config.get('path:static')))
+
+  // Body / Request parsing
   if (this.config.get('parse-xml')) {
     app.use(xmlBodyParser)
   }
   app.use(express.bodyParser())
   app.use(express.methodOverride());
 
-  // Add the app config to locals
-  app.locals(this.config.get('app') || {})
+  // And finally, the router
+  app.use(app.router)
 
-  // Development or test only
+
+  // set up a heartbeat route for checking the health of the server
+  this.useHeartbeat(app)
+
+  // Development or test only init
   if (app.get('env') === 'development' || app.get('env') === 'test') {
     this.logger.warn('Using ' + app.get('env') + ' environment')
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
+
+    // Error testing.
+    app.get('/__error__/404', function (req, res, next) { next() })
+    app.get('/__error__/403', function (req, res, next) {
+      var error = new Error('Not Authorized')
+      error.status = 403
+      next(error)
+    })
+    app.get('/__error__/500', function (req, res, next) { next(new Error('Sample Error')) })
+    app.get('/__error__', function (req, res, next) { next(new Error('Sample Error')) })
     common.proto(app)
   }
 
-  // Production only
+  // Production only init
   if (app.get('env') === 'production') {
-    app.use(express.errorHandler({ dumpExceptions: true }))
   }
 
   this.emit('app-initialized', app);
 }
 
 
-App.prototype.initializeSession = function (app) {
+/**
+ * Adds a heartbeat route to an application.
+ * Normally this only needs to be done for the base app.
+ * @param app
+ */
+SweetJumps.prototype.useHeartbeat = function (app) {
+  app.get(/\/__(ok|heartbeat|pulse|ping|status|proofoflife|amialive|vitals|asdfg|wasd)__/i, function (req, res, next) {
+    try {
+      if (this.isOk()) {
+        res.send(200)
+      } else {
+        next(new Error('Server is down.'))
+      }
+    } catch (err) {
+      next(err)
+    }
+  }.bind(this))
+}
+
+
+/**
+ * Interface method which is used by the heartbeat.
+ * By default, it will always return true (the server is running). If you wish to add
+ * additional conditions for "OK", override this method and either return true, or
+ * throw an error.
+ * @throws {Error}
+ * @returns {boolean}
+ */
+SweetJumps.prototype.isOk = function () { return true }
+
+
+/**
+ * Starts an app's session.
+ * Normally this only needs to be done for the base app.
+ * @param app
+ */
+SweetJumps.prototype.useSession = function (app) {
   if (this.config.get('session') !== false) {
     var sessionOpts = { secret: this.config.get('secret') || null }
     if (this.config.get('mongodb')) {
@@ -298,8 +358,11 @@ App.prototype.initializeSession = function (app) {
 }
 
 
-App.prototype.initializeViews = function (app) {
-  app = app || this.app
+/**
+ * Configures an app's (or the base app's) views (Swig by default, in /app/views)
+ * @param app
+ */
+SweetJumps.prototype.useViews = function (app) {
   var settings = this.config.get('app') || {}
     , config = this.config.get() || {}
 
@@ -351,7 +414,7 @@ App.prototype.initializeViews = function (app) {
  * based on directory name in /app and configuration
  * @param  {string} type
  */
-App.prototype.initializeComponentsByType = function (type) {
+SweetJumps.prototype.initializeComponentsByType = function (type) {
   if (typeof type !== 'string') {
     return;
   }
@@ -375,7 +438,7 @@ App.prototype.initializeComponentsByType = function (type) {
 /**
  * Initializes express midddleware in /app/middleware
  */
-App.prototype.initializeMiddleware = function () {
+SweetJumps.prototype.initializeMiddleware = function () {
   this.initializeComponentsByType('middleware')
 }
 
@@ -383,7 +446,7 @@ App.prototype.initializeMiddleware = function () {
 /**
  * Initializes express controllers (routes) in /app/controllers
  */
-App.prototype.initializeControllers = function () {
+SweetJumps.prototype.initializeControllers = function () {
   this.initializeComponentsByType('controllers')
 }
 
@@ -391,7 +454,7 @@ App.prototype.initializeControllers = function () {
 /**
  * Initializes models in /app/models (Mongoose models by default)
  */
-App.prototype.initializeModels = function () {
+SweetJumps.prototype.initializeModels = function () {
   if (this.config.get('mongodb')) {
     // Open the mongoose connection
     this.mongoose = require('mongoose')
@@ -420,7 +483,7 @@ App.prototype.initializeModels = function () {
 /**
  * Initializes plugins based on configuration.
  */
-App.prototype.initializePlugins = function () {
+SweetJumps.prototype.initializePlugins = function () {
   var plugins = this.config.get('plugins')
   if (plugins) {
     this.on('plugin-pre-init', function (name, pl) {
@@ -457,9 +520,42 @@ App.prototype.initializePlugins = function () {
 
 
 /**
+ * Handles errors / 404s in a sane way.
+ * This is called last so that the catchall does not interfere with any other routes.
+ */
+SweetJumps.prototype.initializeErrorHandler = function () {
+  // General errors thrown in routes or called from next(err)
+  this.app.use(function (err, req, res, next) {
+    this.logger.error('Application Error: ', err)
+
+    res.status(err.status || 500)
+    if (req.accepts('html')) {
+      res.render('500', { error: err })
+    } else if (req.accepts('json')) {
+      res.json({ error: 'Application error' })
+    } else {
+      res.type('txt').send('Application error')
+    }
+  }.bind(this))
+
+  // If we get to this final middleware, it means no route or static responded, generate a 404
+  this.app.use(function (req, res, next) {
+    res.status(404);
+    if (req.accepts('html')) {
+      res.render('404')
+    } else if (req.accepts('json')) {
+      res.json({ error: 'Not found' })
+    } else {
+      res.type('txt').send('Not found')
+    }
+  })
+}
+
+
+/**
  * Loads and returns a global level module (handy shortcut)
  */
-App.prototype.getModule = function (module) {
+SweetJumps.prototype.getModule = function (module) {
   if (module && module.length) {
     return require(this.config.get('path:modules') + '/' + module)
   }
@@ -470,7 +566,7 @@ App.prototype.getModule = function (module) {
 /**
  * Loads and returns a global level model (handy shortcut)
  */
-App.prototype.getModel = function (model) {
+SweetJumps.prototype.getModel = function (model) {
   if (model && model.length) {
     return require(this.config.get('path:app') + '/models/' + model.toLowerCase())
   }
@@ -487,9 +583,9 @@ App.prototype.getModel = function (model) {
  * @param  {string} mountpoint (optional)
  * @return {express app}
  */
-App.prototype.createSubapp = function (parent, mountpoint) {
+SweetJumps.prototype.createSubapp = function (parent, mountpoint) {
   var subapp = express()
-  this.initializeViews(subapp)
+  this.useViews(subapp)
 
   if (typeof parent === 'string') {
     mountpoint = parent
@@ -504,5 +600,6 @@ App.prototype.createSubapp = function (parent, mountpoint) {
 }
 
 
-module.exports.App = App
+module.exports.SweetJumps = SweetJumps
+module.exports.App = SweetJumps
 module.exports.common = common

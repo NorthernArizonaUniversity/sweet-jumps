@@ -13,9 +13,9 @@ process.env.NODE_ENV = 'test'
 var util = require('util')
   , path = require('path')
   , nconf = require('nconf')
-  , app = require('..')
-  , App = app.App
-  , common = app.common
+  , sj = require('./')
+  , SweetJumps = sj.SweetJumps
+  , common = sj.common
 
 // Chai assertions
 var chai = require('chai')
@@ -37,11 +37,11 @@ var request = global.request = require('request')
 // Helper
 var Helper = function () {
   // Helper class can load models and modules if required by the test
-  // To do that, we will canabalize parts of the main App class so we
+  // To do that, we will canabalize parts of the main SweetJumps class so we
   // can have access to the configuration
   this.initializeConfig({
     'node-env': process.env.NODE_ENV
-  }, path.resolve(__dirname + '/../../../'))
+  })
 
   this.db = {
     connect: function (callback) { callback(new Error('Not implemented')) },
@@ -52,10 +52,10 @@ var Helper = function () {
 }
 
 Helper.prototype.emit = function () {} // stub
-Helper.prototype.normalizeEnv = App.prototype.normalizeEnv
-Helper.prototype.initializeConfig = App.prototype.initializeConfig
-Helper.prototype.getModule = App.prototype.getModule
-Helper.prototype.getModel = App.prototype.getModel
+Helper.prototype.normalizeEnv = SweetJumps.prototype.normalizeEnv
+Helper.prototype.initializeConfig = SweetJumps.prototype.initializeConfig
+Helper.prototype.getModule = SweetJumps.prototype.getModule
+Helper.prototype.getModel = SweetJumps.prototype.getModel
 Helper.prototype.dump = common.dump
 
 // Modules

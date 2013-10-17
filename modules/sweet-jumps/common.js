@@ -73,7 +73,7 @@ module.exports.requirePath = function (path, modules) {
 
 module.exports.proto = function (app) {
   // Ignore this.
-  app.all('/__proto__', function (req, res) {
+  app.all(/\/__(proto|sweet|jumps)__/i, function (req, res) {
     var a = ['OI9BiKK','v7cH2','UhoLW3x','h8wla1G','8g5Q7e4','HOVQ7ds','2p10X2L','AnRBAHR','ucZIb9B','OYCqinj','ueqVmN2']
     res.send(new Buffer('PGltZyBzcmM9Imh0dHA6Ly9pLmltZ3VyLmNvbS97e319LmdpZiI+', 'base64').toString('ascii').replace('{{}}', module.exports.randomChoice(a)))
   })

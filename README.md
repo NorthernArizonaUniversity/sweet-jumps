@@ -22,8 +22,8 @@ This is a recommended file structure, but not required. If a particular director
     - **styles/** - Contains source files for client-side CSS (unminified, SASS, Stylus, etc).
 - **config/** - Application configuration files. Recommended: Files should be separated by environment (at least dev and prod, but also test and stage if appropriate, see example).
 - **modules/** - Contains arbitrary class modules that supply some global functionality, but which are separate from the app and not available via NPM. The structure should be similar to node_modules/. This directory also contains middleware which is used across projects that we have found to be generally useful (error handlers, body parsers, etc).
-    - **app/** - The main application module.
-        - *index.js* - Application class. Wraps the Express application, performs necessary setup and includes. Available as `exports.App`.
+    - **sweet-jumps/** - The main application module.
+        - *index.js* - SweetJumps application class. Wraps the Express application, performs necessary setup and includes. Available as `exports.SweetJumps`.
         - *common.js* - Common utility functions used by App, but which might be handy elsewhere. Available as `exports.common`.
         - **test/** - Unit test bootstrap module.
 - ***node_modules/*** - Contains module dependencies handled by NPM. Created automatically, do not manually manage.
@@ -109,4 +109,4 @@ Included Components
 Roadmap
 -------
 
-1. Convert main application code to CoffeScript.
+- Convert main application code to CoffeScript.
