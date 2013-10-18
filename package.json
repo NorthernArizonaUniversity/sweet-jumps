@@ -7,6 +7,10 @@
     { "name": "Ahsan Imam", "email": "ahsan.imam@nau.edu" }
   ],
   "description": "An Express-based full stack web boilerplate",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NorthernArizonaUniversity/sweet-jumps.git"
+  },
   "license": "GPL3",
   "engine": "node >= 0.8.0",
   "scripts": {
