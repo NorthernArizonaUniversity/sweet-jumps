@@ -1,10 +1,13 @@
 {
-  "name": "ewt-nodejs-boilerplate",
-  "version": "1.2.0",
-  "author": {
-    "name": "NAUEWT"
-  },
-  "description": "[Project Description]",
+  "name": "sweet-jumps",
+  "version": "0.10.0",
+  "author": "NAU Enterprise Web Team <ITS-EIS-EWT@xdl.nau.edu>",
+  "contributors": [
+    { "name": "John Hutchison", "email": "john.hutchison@nau.edu" },
+    { "name": "Ahsan Imam", "email": "ahsan.imam@nau.edu" }
+  ],
+  "description": "An Express-based full stack web boilerplate",
+  "license": "GPL3",
   "engine": "node >= 0.8.0",
   "scripts": {
     "start": "node server.js",
