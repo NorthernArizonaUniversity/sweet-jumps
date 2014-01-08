@@ -542,7 +542,6 @@ SweetJumps.prototype.initializeErrorHandler = function () {
 
     res.status(err.status || 500)
     if (req.accepts('html')) {
-      this.logger.debug(res)
       var views = req.app('views')
       req.app.set('views', this.config.get('path:app') + '/views')
 
