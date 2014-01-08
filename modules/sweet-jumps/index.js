@@ -542,7 +542,13 @@ SweetJumps.prototype.initializeErrorHandler = function () {
 
     res.status(err.status || 500)
     if (req.accepts('html')) {
+      this.logger.debug(res)
+      var views = req.app('views')
+      req.app.set('views', this.config.get('path:app') + '/views')
+
       res.render('500', { error: err })
+
+      req.app.set('views', views)
     } else if (req.accepts('json')) {
       res.json({ error: 'Application error' })
     } else {
@@ -552,9 +558,14 @@ SweetJumps.prototype.initializeErrorHandler = function () {
 
   // If we get to this final middleware, it means no route or static responded, generate a 404
   this.app.use(function (req, res, next) {
-    res.status(404);
+    res.status(404)
     if (req.accepts('html')) {
+      var views = req.app('views')
+      req.app.set('views', this.config.get('path:app') + '/views')
+
       res.render('404')
+
+      req.app.set('views', views)
     } else if (req.accepts('json')) {
       res.json({ error: 'Not found' })
     } else {
