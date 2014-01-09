@@ -78,7 +78,10 @@ Configuration is handled using JSON files in the application's config directory.
 - port - <int> The port to listen for incoming connections on.
 - auto-start - <boolean> If true, the server will automatically start listening for connections when init is finished. This is generally fine if you are using the simple-server model, but this prevents you from hooking events or extending some functions.
 - parse-xml - <boolean> If true, the server will accept and parse requests with XML post bodies if the "Content-Type:application-xml" header is sent.
-- session - <boolean> If true a session will be initialized for requests.
+- session - <mixed> If truthy a session will be initialized for requests.
+    - If boolean and true, a default memory store will be used with the application secret.
+    - If string, it will try to use it as a key for the type of store to use. Currently only supports "mongo" or "mongodb"
+    - If an object, it will use it as the session options object. Store and secret will be set automatically if not provided, and any other cookie options may be specified.
 - secret - <string> Secret key used for secure sessions, just set it to some unique value.
 - mongodb - <object> MongoDB connection config. Generally will have just one key "uri", which contains a mongodb:// connection string. Other keys as used by Mongoose.
 - logger - <object> Logger (Log4js) configuration. By default, just used console, but can also be set to use files in multiple configurations. See https://github.com/nomiddlename/log4js-node for more details.
