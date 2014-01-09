@@ -354,16 +354,30 @@ SweetJumps.prototype.isOk = function () { return true }
  * @param app
  */
 SweetJumps.prototype.useSession = function (app) {
-  if (this.config.get('session') !== false) {
-    var sessionOpts = { secret: this.config.get('secret') || null }
-    if (this.config.get('mongodb')) {
+  var session = this.config.get('session')
+  if (session) {
+    var sessionOpts = (typeof session === 'object') ? session : {}
+
+    if (typeof session === 'string') {
+      sessionOpts.store = session
+    }
+
+    if (!sessionOpts.secret && this.config.get('secret')) {
+      sessionOpts.secret = this.config.get('secret')
+    }
+
+    if (/^mongo(db)?/.test(sessionOpts.store) && this.config.get('mongodb')) {
       // Mongo session
       this.logger.info('Using session (MongoDB store)')
       sessionOpts.store = new MongoStore(this.config.get('mongodb'))
     } else {
       // Default session
-      this.logger.info('Using session (default store)')
+      delete sessionOpts.store
+      this.logger.info('Using session (memory store)')
     }
+
+    this.logger.debug(sessionOpts)
+
     app.use(express.cookieParser(sessionOpts.secret || null))
     app.use(express.session(sessionOpts))
   }
