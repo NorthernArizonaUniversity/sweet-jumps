@@ -258,11 +258,8 @@ SweetJumps.prototype.initializeApp = function (app) {
   // Initialize Express
   app = app || this.app
 
-  // optional
-  this.useSession(app)
-
   // Import settings from config / init views
-  app.set('title', this.config.get('app:title') || '[EWT Node.js Project]')
+  app.set('title', this.config.get('app:title') || '[Sweet Jumps Node.js Project]')
   app.locals(this.config.get('app') || {})
   this.useViews(app)
 
@@ -285,6 +282,9 @@ SweetJumps.prototype.initializeApp = function (app) {
   }
   app.use(express.bodyParser())
   app.use(express.methodOverride());
+
+  // optional
+  this.useSession(app)
 
   // And finally, the router
   app.use(app.router)
@@ -378,7 +378,7 @@ SweetJumps.prototype.useSession = function (app) {
 
     this.logger.debug(sessionOpts)
 
-    app.use(express.cookieParser(sessionOpts.secret || null))
+    app.use(express.cookieParser())
     app.use(express.session(sessionOpts))
   }
 }
