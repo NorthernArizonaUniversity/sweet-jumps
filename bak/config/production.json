@@ -1,0 +1,36 @@
+{
+  "access-log":  true,
+  "auto-start":  true,
+  "mongodb":     { "url": "mongodb://localhost/db" },
+  "parse-xml":   true,
+  "port":        8080,
+  "secret":      "cc8e955e-041c-4bf7-a7df-6f3fded3d85f",
+  "session":     true,
+  "base-path":   false,
+  "logger": {
+    "appenders": [
+      { "type": "console" }
+    ],
+    "replaceConsole": true,
+    "level": "WARN"
+  },
+
+  "app": {
+    "how-to-use": "Use this container for all your application specific settings",
+    "title": "[EWT Node.js Project]",
+    "misc": "value"
+  },
+  "controllers-disabled": {
+    "how-to-use": "Change the name to 'controllers'. Keys are the name of the controllers you want to load and values are options you want to pass in.",
+    "example": { "option": "value" }
+  },
+  "middleware-disabled": {
+    "how-to-use": "Change the name to 'middleware'. Keys are the name of the controllers you want to load and values are options you want to pass in."
+  },
+  "models-disabled": {
+    "how-to-use": "Change the name to 'models'. Keys are the name of the controllers you want to load and values are options you want to pass in."
+  },
+  "plugins": {
+    "example": {}
+  }
+}

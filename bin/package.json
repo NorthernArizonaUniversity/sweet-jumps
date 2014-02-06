@@ -1,0 +1,34 @@
+{
+  "name": "sweet-jumps",
+  "version": "0.11.0",
+  "author": "NAU Enterprise Web Team <ITS-EIS-EWT@xdl.nau.edu>",
+  "contributors": [
+    { "name": "John Hutchison", "email": "john.hutchison@nau.edu" },
+    { "name": "Ahsan Imam", "email": "ahsan.imam@nau.edu" }
+  ],
+  "description": "An Express-based full stack web framework",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NorthernArizonaUniversity/sweet-jumps.git"
+  },
+  "license": "GPL3",
+  "engine": "node >= 0.10.0",
+  "main": "lib/sweet-jumps/index.js",
+  "bin": { "sj": "./sj" },
+  "scripts": {
+    "test": "grunt mocha:all"
+  },
+  "dependencies": {
+    "commander": "~2.1.0",
+    "grunt": "~0.4.2",
+    "grunt-init": "latest",
+    "grunt-shell-spawn": "~0.3.0",
+    "grunt-runner": "~1.2.1"
+  },
+  "devDependencies": {
+    "mocha": "~1.17.1",
+    "chai": "~1.9.0",
+    "zombie": "~2.0",
+    "request": "~2.33.0"
+  }
+}

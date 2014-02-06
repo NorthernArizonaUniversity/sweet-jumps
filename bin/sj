@@ -1,0 +1,68 @@
+#!/usr/bin/env node
+
+/*
+  Copyright 2013-2014 Northern Arizona University
+
+  This file is part of Sweet Jumps.
+
+  Sweet Jumps is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+  Sweet Jumps is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along with Sweet Jumps. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+var fs = require('fs')
+  , path = require('path')
+  , program = require('commander')
+  , common = require('../lib/sweet-jumps/common')
+  , log = console.log
+  , version = '0.11.0'
+  , commands = {}
+  , paths = {
+      base: path.resolve(__dirname, '..'),
+      lib:  path.resolve(__dirname, '..', 'lib'),
+      init: path.resolve(__dirname, '..', 'init'),
+      cwd:  process.cwd()
+    }
+
+    common.dump(paths)
+
+/**
+ * Handles commands to generate new projects or components
+ * @param  {[type]} cmd     [description]
+ * @param  {[type]} options [description]
+ * @return {[type]}         [description]
+ */
+
+commands.create = function (cmd, options) {
+
+
+    common.dump(cmd)
+    common.dump(options)
+
+
+}
+
+
+/**
+ * Create and run the CLI component
+ */
+
+program
+  .version(version)
+
+program
+  .command('create <type>')
+  .description('generate a new project or component')
+  .option('-n, --name <name>', 'name of the project or component')
+  .action(commands.create)
+  .on('--help', function () {
+    console.log('Creates a new project skeleton at your current working directory with the specified name, or adds a new component to the project at the current working directory.')
+  })
+
+
+
+program.parse(process.argv)
+
+if (!program.args.length) program.help()
