@@ -49,23 +49,13 @@ exports.template = function(grunt, init, done) {
 
     props.keywords = [];
     props.dependencies = {
-      "coffee-script": "latest",
-      "express": "latest",
-      "swig": "latest",
-      "nconf": "latest",
-      "connect-mongo": "latest",
-      "mongoose": "latest",
-      "async": "latest",
-      "plugin-manager": "git+https://bitbucket.org/nauewt/plugin-manager.git",
       "underscore": "latest",
       "log4js": "latest",
       "grunt": "latest",
-      "grunt-contrib-coffee": "latest",
       "grunt-shell-spawn": "latest",
       "grunt-nodemon": "latest"
     }
     props.devDependencies = {
-      "coffee-trace": "latest",
       "mocha": "latest",
       "chai": "latest",
       "zombie": "latest",
@@ -85,7 +75,7 @@ exports.template = function(grunt, init, done) {
     // (swig templates uses the same template syntax as grunt-init)
     for (var f in files) {
       if (/\.html$/.test(f) && files.hasOwnProperty(f)) {
-        init.copy(f, files[f], props)
+        init.copy(f, f, props)
         delete files[f]
       }
     }

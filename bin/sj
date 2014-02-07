@@ -108,6 +108,7 @@ commands.create = function (cmd, params, options) {
 
 commands.create_project = function (params, options) {
   var name = params.shift() || options.name
+    , initOpts = []
 
   if (!name) {
     error('name is required to create a project.', [
@@ -116,7 +117,11 @@ commands.create_project = function (params, options) {
     ])
   }
 
-  gruntInit('project')//, { sj_name: name })
+  if (options.force) {
+    initOpts.push('--force')
+  }
+
+  gruntInit('project', initOpts, { sj_name: name })
 }
 
 
@@ -152,13 +157,26 @@ function printUsage(usage) {
  * Runs grunt init with the specified template
  * @param  {string} template The template directory to init
  */
-function gruntInit(template, env, callback) {
-  if (typeof env === 'function') {
-    callback = env
+function gruntInit(template, options, env, callback) {
+  if (typeof options === 'function') {
+    callback = options
+    options = []
     env = {}
   }
 
-  exec(paths.getBinary('grunt-init'), [ paths.getTemplate(template) ], env, function (err, stdout, stderr) {
+  if (typeof env === 'function') {
+    callback = env
+    if (typeof options === 'string' || Array.isArray(options)) {
+      env = {}
+    } else {
+      env = options
+      options = []
+    }
+  }
+
+  options = [ paths.getTemplate(template) ].concat(options)
+
+  exec(paths.getBinary('grunt-init'), options, env, function (err, stdout, stderr) {
     log(stdout)
     log(stderr)
 
@@ -195,16 +213,20 @@ function exec(command, options, env, callback) {
     command = command.concat(options)
   }
 
+  if (env) {
+    for (k in env) {
+      if (env.hasOwnProperty(k)) {
+        command.unshift(k + '="' + env[k] + '"')
+      }
+    }
+  }
+
   common.dump({
     command: command.join(' '),
-    env: env,
     cwd: process.cwd()
   })
 
-  e(command.join(' '), {
-    cwd: process.cwd(),
-    env: env
-  }, callback)
+  e(command.join(' '), { cwd: process.cwd() }, callback)
 }
 
 

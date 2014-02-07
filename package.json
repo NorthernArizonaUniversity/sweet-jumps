@@ -31,17 +31,31 @@
     "test": "grunt mocha:all"
   },
   "dependencies": {
+    "async": "~0.2.9",
+    "connect-mongo": "~0.3.3",
+    "express": "~3.4.0",
+    "log4js": "~0.6.8",
+    "mongoose": "~3.6.19",
+    "plugin-manager": "git+https://bitbucket.org/nauewt/plugin-manager.git",
+    "nconf": "~0.6.7",
+    "swig": "~1.0",
+    "underscore": "~1.5.2",
     "yargs": "~1.0.15",
     "grunt": "~0.4.2",
-    "grunt-init": "latest",
     "grunt-shell-spawn": "~0.3.0",
+    "grunt-nodemon": "~0.1.0",
+    "grunt-init": "~0.3.1",
     "grunt-runner": "~1.2.1"
   },
   "devDependencies": {
     "mocha": "~1.17.1",
     "chai": "~1.9.0",
     "zombie": "~2.0",
-    "request": "~2.33.0"
+    "request": "~2.33.0",
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-sass": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-watch": "~0.5.1"
   },
   "keywords": [
     "express",

@@ -23,7 +23,7 @@ module.exports = function (app, options, context) {
   logger.info('Example controller init')
 
   app.get('/', function (req, res) {
-    res.render('example/index', {
+    res.render('main/index', {
       'message': 'Hi! It works!'
     })
   })
