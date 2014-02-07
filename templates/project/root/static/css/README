@@ -1,0 +1,3 @@
+Files in this directory are served directly to the client. The preferred method
+is to put source SCSS, LESS, or CSS files in /app/styles and compile them into
+main.css in this directory.

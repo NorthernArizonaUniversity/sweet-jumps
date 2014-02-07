@@ -1,5 +1,7 @@
+#!/usr/bin/env node
+
 /*
-  Copyright 2013-2014 Northern Arizona University
+  Copyright 2013 Northern Arizona University
 
   This file is part of Sweet Jumps.
 
@@ -10,13 +12,8 @@
   You should have received a copy of the GNU General Public License along with Sweet Jumps. If not, see <http://www.gnu.org/licenses/>.
 */
 
-module.exports = function (grunt) {
-  // Project configuration.
-  grunt.initConfig({
-    // Config
-    pkg: grunt.file.readJSON('package.json')
-  })
-
-  grunt.loadNpmTasks('grunt-shell-spawn')
-
-}
+// If you do not wish to customize the app core behavior or hook initilization events
+// simply create an app instance and start or auto-start it:
+var SweetJumps = require('./modules/sweet-jumps').SweetJumps
+new SweetJumps()
+// app.start() // if necessary

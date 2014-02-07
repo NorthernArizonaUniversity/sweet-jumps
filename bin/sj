@@ -14,19 +14,79 @@
 
 var fs = require('fs')
   , path = require('path')
-  , program = require('commander')
   , common = require('../lib/sweet-jumps/common')
+  , package = require('../package.json')
   , log = console.log
-  , version = '0.11.0'
   , commands = {}
   , paths = {
       base: path.resolve(__dirname, '..'),
+      bin:  path.resolve(__dirname, '..', 'node_modules/.bin'),
       lib:  path.resolve(__dirname, '..', 'lib'),
-      init: path.resolve(__dirname, '..', 'init'),
-      cwd:  process.cwd()
+      tmpl: path.resolve(__dirname, '..', 'templates'),
+      cwd:  process.cwd(),
     }
+  , argv = require('yargs')
+    .alias('V', 'version')
+    .alias('v', 'verbose')
+    .argv
 
-    common.dump(paths)
+paths.getBinary = function (name) { return path.resolve(paths.bin, name) }
+paths.getTemplate = function (name) { return path.resolve(paths.tmpl, name) }
+
+
+/**
+ * Main function that processes options and calls commands
+ * @param  {[type]} paths [description]
+ * @param  {[type]} argv  [description]
+ * @return {[type]}       [description]
+ */
+function main(paths, argv) {
+  var args = argv._.slice()
+    , command = args.shift()
+    , params = args.slice()
+
+  if (argv.version) {
+    command = 'version'
+  }
+
+  if (typeof commands[command] !== 'function') {
+    command = 'help'
+  }
+
+  // common.dump(paths)
+  // common.dump(command)
+  // common.dump(commands[command])
+
+  commands[command](command, params, argv)
+}
+
+
+//////////////// COMMANDS /////////////////////
+
+/**
+ * Prints the version and exits
+ */
+commands.version = function (cmd, params, options) {
+  console.log(package.name + ' ' + package.version)
+  process.exit()
+}
+
+/**
+ * Prints usage information or help for the specified command and exits
+ */
+commands.help = function (cmd, params, options) {
+  log('Sweet Jumps Help')
+
+  if (cmd, commands[cmd]) {
+    log(commands[cmd].help || '')
+    printUsage(commands[cmd].usage || null)
+  } else {
+    log('TODO')
+  }
+
+  process.exit()
+}
+
 
 /**
  * Handles commands to generate new projects or components
@@ -35,34 +95,118 @@ var fs = require('fs')
  * @return {[type]}         [description]
  */
 
-commands.create = function (cmd, options) {
+commands.create = function (cmd, params, options) {
+  var template = params.shift()
 
+  if (!template || typeof commands['create_' + template] !== 'function') {
+    error('invalid template', 'sj create <template> [options]')
+  }
 
-    common.dump(cmd)
-    common.dump(options)
-
-
+  commands['create_' + template](params, options)
 }
 
 
+commands.create_project = function (params, options) {
+  var name = params.shift() || options.name
+
+  if (!name) {
+    error('name is required to create a project.', [
+      '   sj create project <name> [options]',
+      'or sj create project --name=<name> [options]'
+    ])
+  }
+
+  gruntInit('project')//, { sj_name: name })
+}
+
+
+//////////////// HELPERS /////////////////////
+
 /**
- * Create and run the CLI component
+ * Shows the given error and quits the program, optionally showing the given usage.
+ * @param  {string} error
+ * @param  {array|string|null} usage
  */
+function error(error, usage) {
+  log("Cannot proceed:" + error)
+  printUsage(usage)
+  process.exit()
+}
 
-program
-  .version(version)
 
-program
-  .command('create <type>')
-  .description('generate a new project or component')
-  .option('-n, --name <name>', 'name of the project or component')
-  .action(commands.create)
-  .on('--help', function () {
-    console.log('Creates a new project skeleton at your current working directory with the specified name, or adds a new component to the project at the current working directory.')
+function printUsage(usage) {
+  if (usage) {
+    log("\nUsage:")
+
+    if (!Array.isArray(usage)) { usage = [usage] }
+
+    usage.forEach(function (line) {
+      log("    " + line)
+    })
+
+    log("\n")
+  }
+}
+
+/**
+ * Runs grunt init with the specified template
+ * @param  {string} template The template directory to init
+ */
+function gruntInit(template, env, callback) {
+  if (typeof env === 'function') {
+    callback = env
+    env = {}
+  }
+
+  exec(paths.getBinary('grunt-init'), [ paths.getTemplate(template) ], env, function (err, stdout, stderr) {
+    log(stdout)
+    log(stderr)
+
+    if (callback) callback(err, stdout, stderr)
+  })
+}
+
+/**
+ * Executes a command asynchronously. Wrapper around child_process.exec
+ * @param  {array|string} command
+ * @param  {array|null}   options
+ * @param  {object|null}  env
+ * @param  {Function}     callback  function (err, stdout, stderr)
+ */
+function exec(command, options, env, callback) {
+  var e = require('child_process').exec
+
+  if (typeof options === 'function') {
+    callback = options
+    options = []
+    env = {}
+  }
+
+  if (typeof env === 'function') {
+    callback = env
+    env = {}
+  }
+
+  if (!Array.isArray(command)) {
+    command = [command]
+  }
+
+  if (options) {
+    command = command.concat(options)
+  }
+
+  common.dump({
+    command: command.join(' '),
+    env: env,
+    cwd: process.cwd()
   })
 
+  e(command.join(' '), {
+    cwd: process.cwd(),
+    env: env
+  }, callback)
+}
 
 
-program.parse(process.argv)
-
-if (!program.args.length) program.help()
+// process
+main(paths, argv)
