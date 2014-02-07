@@ -66,7 +66,7 @@ exports.template = function(grunt, init, done) {
       "grunt-contrib-watch": "latest"
     }
 
-    props.filename = props.name.toLowerCase().replace(/\W\s/g, '-')
+    props.filename = props.name.toLowerCase().replace(/[^a-z0-9\-]/g, '-')
 
     // Files to copy (and process).
     var files = init.filesToCopy(props)
@@ -84,6 +84,7 @@ exports.template = function(grunt, init, done) {
     init.copyAndProcess(files, props)
 
     // Generate package.json file.
+    props.name = props.filename
     init.writePackageJSON('package.json', props);
 
     // All done!
