@@ -49,7 +49,7 @@ exports.template = function(grunt, init, done) {
 
     props.keywords = [];
     props.dependencies = {
-      "sweet-jumps": "git://github.com/NorthernArizonaUniversity/sweet-jumps.git",
+      "sweet-jumps": "git+http://github.com/NorthernArizonaUniversity/sweet-jumps.git",
       "underscore": "latest",
       "log4js": "latest",
       "grunt": "latest",

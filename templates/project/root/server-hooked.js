@@ -18,7 +18,7 @@
  * and start the app manually.
  */
 
-var SweetJumps = require('./modules/sweet-jumps').SweetJumps
+var SweetJumps = require('sweet-jumps').SweetJumps
   , app = new SweetJumps({ 'auto-start': false })
 
 // Hook an init event (see README.md for all events)

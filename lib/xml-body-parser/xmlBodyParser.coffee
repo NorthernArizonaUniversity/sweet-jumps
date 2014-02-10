@@ -1,5 +1,4 @@
 xml2js = require 'xml2js'
-utils = require '../../node_modules/express/node_modules/connect/lib/utils'
 parser = new xml2js.Parser()
 
 xmlBodyParser = (req, res, next) ->
@@ -10,7 +9,7 @@ xmlBodyParser = (req, res, next) ->
   return next()  if 'GET' is req.method or 'HEAD' is req.method
 
   # check Content-Type
-  return next()  unless 'application/xml' is req.headers['content-type'] or 'application/xml' is utils.mime(req)
+  return next()  unless 'application/xml' is req.headers['content-type'] or 'application/xml' is (req.headers['content-type'] || '').split(';')[0]
 
   # flag as parsed
   req._body = true

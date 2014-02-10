@@ -13,7 +13,7 @@
 */
 
 var util = require('util')
-  , SweetJumps = require('./modules/sweet-jumps').SweetJumps
+  , SweetJumps = require('sweet-jumps').SweetJumps
 
 /**
  * If you need to extensively need to modify application behavior (or just want
