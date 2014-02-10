@@ -1,6 +1,6 @@
 {
   "name": "sweet-jumps",
-  "version": "0.11.2",
+  "version": "0.11.3",
   "author": "NAU Enterprise Web Team <ITS-EIS-EWT@xdl.nau.edu>",
   "contributors": [
     { "name": "John Hutchison", "email": "john.hutchison@nau.edu" },
@@ -67,6 +67,6 @@
     "boilerplate"
   ],
   "readmeFilename": "README.md",
-  "_id": "sweet-jumps@0.11.2",
+  "_id": "sweet-jumps@0.11.3",
   "_from": "sweet-jumps@latest"
 }

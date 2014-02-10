@@ -24,13 +24,13 @@ module.exports = function(grunt) {
     // Nodemon - Runs the server and restarts on changes
     nodemon: {
       server: {
+        script: 'server.js',
         options: {
-          file: 'server.js',
           args: [],
           nodeArgs: [],
-          ignoredFiles: ['README.md', 'test/**', 'node_modules/**', '.git/**', '.idea/**'],
-          //watchedExtensions: ['js'],
-          //watchedFolders: ['test', 'tasks'],
+          ignore: ['README.md', 'test/**', 'node_modules/**', '.git/**', '.idea/**'],
+          //ext: ['js'],
+          //watch: ['test', 'tasks'],
           delayTime: 1,
           env: {
             NODE_ENV: 'prod'
@@ -156,10 +156,10 @@ module.exports = function(grunt) {
    */
   grunt.registerTask('server', function (env) {
     if (
-      !grunt.file.exists(grunt.config('nodemon.server.options.file'))
+      !grunt.file.exists(grunt.config('nodemon.server.script'))
       && grunt.file.exists('server-simple.js')
     ) {
-      grunt.config('nodemon.server.options.file', 'server-simple.js')
+      grunt.config('nodemon.server.script', 'server-simple.js')
     }
 
     if (env) {
@@ -214,10 +214,10 @@ module.exports = function(grunt) {
     var src = this.data.src || 'test/*'
       , options = this.data.options || {}
       , command = ['NODE_ENV=test ./node_modules/.bin/mocha'
-                  , '--compilers coffee:coffee-script'
+                  // , '--compilers coffee:coffee-script'
+                  //, '--require coffee-script'
+                  , '--require node_modules/sweet-jumps/lib/sweet-jumps/test'
                   , '--reporter ' + (options.reporter || 'spec')
-                  , '--require coffee-script'
-                  , '--require modules/sweet-jumps/test'
                   , '--colors']
       , e = require('child_process').exec
       , done = this.async()
