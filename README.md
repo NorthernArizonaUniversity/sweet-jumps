@@ -1,5 +1,7 @@
-Sweet Jumps - A Node.js Webapp Boilerplate
-==========================
+Sweet Jumps - A Node.js Webapp Framework
+========================================
+
+*NOTE - Sweet Jumps is currently undergoing a major refactor to a standard Node.js module and this documentation may contain inaccuracies.*
 
 Boilerplate / framework for Node.js web applications to enable consistency of approach and maintenance.
 
