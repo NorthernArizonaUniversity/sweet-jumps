@@ -80,6 +80,16 @@ exports.template = function(grunt, init, done) {
       }
     }
 
+    // Only use one server file
+    var server = process.env.sj_server || null
+    if (server == 'extended' || server == 'hooked' || server == 'simple') {
+      delete files['server-extended.js']
+      delete files['server-hooked.js']
+      delete files['server-simple.js']
+
+      files['server.js'] = 'project/root/server-'+ server +'.js'
+    }
+
     // Actually copy (and process) files.
     init.copyAndProcess(files, props)
 

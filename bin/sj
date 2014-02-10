@@ -109,6 +109,7 @@ commands.create = function (cmd, params, options) {
 commands.create_project = function (params, options) {
   var name = params.shift() || options.name
     , initOpts = []
+    , env = { sj_name: name }
 
   if (!name) {
     error('name is required to create a project.', [
@@ -117,11 +118,21 @@ commands.create_project = function (params, options) {
     ])
   }
 
+  if (options.server == 'simple' || options.server == 'hooked' || options.server == 'extended') {
+    env.sj_server = options.server
+  } else if (options['server-simple']) {
+    env.sj_server = 'simple'
+  } else if (options['server-hooked']) {
+    env.sj_server = 'hooked'
+  } else if (options['server-extended']) {
+    env.sj_server = 'extended'
+  }
+
   if (options.force) {
     initOpts.push('--force')
   }
 
-  gruntInit('project', initOpts, { sj_name: name })
+  gruntInit('project', initOpts, env)
 }
 
 
@@ -221,10 +232,10 @@ function exec(command, options, env, callback) {
     }
   }
 
-  common.dump({
-    command: command.join(' '),
-    cwd: process.cwd()
-  })
+  // common.dump({
+  //   command: command.join(' '),
+  //   cwd: process.cwd()
+  // })
 
   e(command.join(' '), { cwd: process.cwd() }, callback)
 }
