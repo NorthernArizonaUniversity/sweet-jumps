@@ -28,7 +28,7 @@ module.exports = function(grunt) {
         options: {
           args: [],
           nodeArgs: [],
-          ignore: ['README.md', 'test/**', 'node_modules/**', '.git/**', '.idea/**'],
+          ignore: ['README.md', '*.log', 'test/**', 'node_modules/**', '.git/**', '.idea/**'],
           //ext: ['js'],
           //watch: ['test', 'tasks'],
           delayTime: 1,

@@ -42,6 +42,7 @@ exports.template = function(grunt, init, done) {
     props.node_version = process.env.sj_node_version || '>= 0.8.0'
     props.main = 'server.js'
     props.scripts = {
+      "prepublish": "ln -s ./node_modules/sweet-jumps/bin/sj ./sj",
       "start": "node server.js",
       "test": "grunt mocha:all"
     }
