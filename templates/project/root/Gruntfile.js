@@ -24,19 +24,16 @@ module.exports = function(grunt) {
     // Nodemon - Runs the server and restarts on changes
     nodemon: {
       server: {
+        script: 'server.js',
         options: {
-          file: 'server.js',
           args: [],
           nodeArgs: [],
-          ignoredFiles: ['README.md', 'test/**', 'node_modules/**', '.git/**', '.idea/**'],
-          //watchedExtensions: ['js'],
-          //watchedFolders: ['test', 'tasks'],
+          ignore: ['README.md', 'test/**', 'node_modules/**', '.git/**', '.idea/**'],
           delayTime: 1,
           env: {
             NODE_ENV: 'prod'
           },
-          cwd: __dirname,
-          exec: 'node'
+          cwd: __dirname
         }
       }
     },
