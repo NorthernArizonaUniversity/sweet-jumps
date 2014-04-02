@@ -1,10 +1,16 @@
 {
   "name": "sweet-jumps",
-  "version": "0.11.4",
+  "version": "0.12.0",
   "author": "NAU Enterprise Web Team <ITS-EIS-EWT@xdl.nau.edu>",
   "contributors": [
-    { "name": "John Hutchison", "email": "john.hutchison@nau.edu" },
-    { "name": "Ahsan Imam", "email": "ahsan.imam@nau.edu" }
+    {
+      "name": "John Hutchison",
+      "email": "john.hutchison@nau.edu"
+    },
+    {
+      "name": "Ahsan Imam",
+      "email": "ahsan.imam@nau.edu"
+    }
   ],
   "description": "An Express-based full stack web framework",
   "homepage": "https://github.com/NorthernArizonaUniversity/sweet-jumps",
@@ -32,21 +38,22 @@
   },
   "dependencies": {
     "async": "~0.2.9",
+    "colors": "^0.6.2",
     "connect-mongo": "~0.3.3",
     "express": "~3.4.0",
+    "grunt": "~0.4.2",
+    "grunt-init": "~0.3.1",
+    "grunt-nodemon": "~0.1.0",
+    "grunt-runner": "~1.2.1",
+    "grunt-shell-spawn": "~0.3.0",
     "log4js": "~0.6.8",
     "mongoose": "~3.6.19",
-    "plugin-manager": "git+https://bitbucket.org/nauewt/plugin-manager.git",
     "nconf": "~0.6.7",
+    "plugin-manager": "git+https://bitbucket.org/nauewt/plugin-manager.git",
     "swig": "~1.0",
     "underscore": "~1.5.2",
-    "yargs": "~1.0.15",
-    "grunt": "~0.4.2",
-    "grunt-shell-spawn": "~0.3.0",
-    "grunt-nodemon": "~0.1.0",
-    "grunt-init": "~0.3.1",
-    "grunt-runner": "~1.2.1",
-    "xml2js": "~0.4.1"
+    "xml2js": "~0.4.1",
+    "yargs": "~1.0.15"
   },
   "devDependencies": {
     "mocha": "~1.17.1",

@@ -1,7 +1,7 @@
 Sweet Jumps - A Node.js Webapp Framework
 ========================================
 
-**NOTE - Sweet Jumps is currently undergoing a major refactor to a standard Node.js module and this documentation may contain inaccuracies.**
+**NOTE - Sweet Jumps is currently undergoing a major refactor. THIS DOCUMENTATION CANNOT BE TRUSTED. It will be updated shortly.**
 
 Boilerplate / framework for Node.js web applications to enable consistency of approach and maintenance.
 
@@ -125,4 +125,9 @@ Included Components
 Roadmap
 -------
 
-- Convert main application code to CoffeScript.
+- Rename static to public
+- Express 4
+- https://github.com/ericf/express3-handlebars
+- Ember
+- Bootstrap
+- Templates for both

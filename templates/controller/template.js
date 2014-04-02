@@ -29,16 +29,22 @@ exports.template = function(grunt, init, done) {
 
   init.process({}, [
     // Prompt for these values.
-    {
-      name: 'name',
-      message: 'Route name (eg. "my-route" maps to "http://example.com/my-route")',
-      default: null,
-      validator: /^[\w+\-]+$/,
-      warning: 'Route names should be lowercase with words separated by hyphens or underscores.'
-    }
+    // {
+    //   name: 'name',
+    //   message: 'Route name (eg. "my-route" maps to "http://example.com/my-route")',
+    //   default: null,
+    //   validator: /^[\w+\-]+$/,
+    //   warning: 'Route names should be lowercase with words separated by hyphens or underscores.'
+    // }
   ], function(err, props) {
-    props.name = props.name.toLowerCase()
-    props.filename = props.name.replace(/\_/g, '-')
+
+    if (process.env.sj_name) {
+      props.name = process.env.sj_name
+    } else {
+      init.prompts = [init.prompt('name', null)]
+    }
+
+    props.filename = props.name.replace(/[\_\-]+/g, '-').toLowerCase()
 
     // Files to copy (and process).
     var files = init.filesToCopy(props)

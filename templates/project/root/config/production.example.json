@@ -1,9 +1,9 @@
 {
   "access-log":  true,
-  "auto-start":  true,
+  "auto-start":  false,
   "mongodb":     { "url": "mongodb://localhost/db" },
   "parse-xml":   true,
-  "port":        8080,
+  "port":        5050,
   "secret":      "your-application-secret",
   "session":     true,
   "base-path":   false,

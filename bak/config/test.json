@@ -1,8 +1,0 @@
-{
-  "config-extends": "production",
-  "port": 7357,
-  "mongodb": { "url": "mongodb://localhost/db_test" },
-  "logger": {
-    "level": "ALL"
-  }
-}

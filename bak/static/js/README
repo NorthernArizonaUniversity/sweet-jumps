@@ -1,3 +1,0 @@
-Files in this directory are served directly to the client. The preferred method
-is to put source JavaScript, CoffeeScript, etc files in /app/scripts and compile
-them into main.min.js or similar in this directory.

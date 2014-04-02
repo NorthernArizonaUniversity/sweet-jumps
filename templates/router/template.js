@@ -13,7 +13,7 @@
 'use strict'
 
 // Basic template description.
-exports.description = 'Creates a new application model.'
+exports.description = 'Creates a new application router and index view.'
 
 // Template-specific notes to be displayed before question prompts.
 exports.notes = ''
@@ -31,16 +31,10 @@ exports.template = function(grunt, init, done) {
     // Prompt for these values.
     // {
     //   name: 'name',
-    //   message: 'Model name',
+    //   message: 'Route name (eg. "my-route" maps to "http://example.com/my-route")',
     //   default: null,
-    //   validator: /^[A-Z]\w+/,
-    //   warning: 'Model name should be in full CamelCase.'
-    // },
-    // {
-    //   name: 'collection',
-    //   message: 'Collection name (auto)',
-    //   default: '',
-    //   warning: 'Collection name should be blank for auto (based on model name) or be a valid MongoDB collection name.'
+    //   validator: /^[\w+\-]+$/,
+    //   warning: 'Route names should be lowercase with words separated by hyphens or underscores.'
     // }
   ], function(err, props) {
 
@@ -50,13 +44,7 @@ exports.template = function(grunt, init, done) {
       init.prompts = [init.prompt('name', null)]
     }
 
-    props.lower = props.name.replace(/(.)([A-Z])/g, '$1-$2').toLowerCase()
-
-    if (process.env.sj_collection) {
-      props.collection = process.env.sj_collection
-    } else {
-      props.collection = props.lower
-    }
+    props.filename = props.name.replace(/[\_\-]+/g, '-').toLowerCase()
 
     // Files to copy (and process).
     var files = init.filesToCopy(props)

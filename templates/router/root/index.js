@@ -9,24 +9,29 @@
 
   You should have received a copy of the GNU General Public License along with Sweet Jumps. If not, see <http://www.gnu.org/licenses/>.
 */
+'use strict'
 
-// To get a logger instance, use the following (preferred)
-var logger = require('log4js').getLogger('[mdlwr] example')
-// Or use the getLogger statement on line 13 (inside the controller init)
+var logger = require('log4js').getLogger('[ctrl] {%= name %} router')
 
-/**
- * Example middleware initialization function.
- * @param  {express} app    The global express app.
- * @param  {object} options Configuration if it exists
- * @param  {[type]} context The instance of the SweetJumps class. Preferably you would not use this unless necessary (to getModule for instance).
- */
 module.exports = function (app, options, context) {
-  'use strict';
-  //var logger = context.getLogger('[ctrl] example')
-  logger.info('Example middleware init')
 
-  app.use(function (req, res, next) {
-    logger.info('Example middleware reporting in...')
-    next()
-  });
+  logger.info("Initializing {%= name %} subapp")
+
+  var express = require('express')
+    , common = context.getModule('sweet-jumps').common
+    , config = context.config.get('controllers:{%= name %}')
+    , routerApp = context.createSubapp('/{%= name %}')
+    , routeOptions = {
+        config: context.config.get('app'),
+        logger: logger
+      }
+
+  // Import routes
+  var routes = common.requirePath(__dirname + '/routes')
+  for (var route in routes) {
+    if (routes.hasOwnProperty(route) && typeof routes[route] === 'function') {
+      var routeApp = context.createSubapp(routerApp, '/' + route)
+      routes[route](routeApp, routeOptions, context)
+    }
+  }
 }
