@@ -1,11 +1,9 @@
-Sweet Jumps - A Node.js Webapp Framework
-========================================
+Sweet Jumps - A Node.js Web Framework
+=====================================
 
-**NOTE - Sweet Jumps is currently undergoing a major refactor. THIS DOCUMENTATION CANNOT BE TRUSTED. It will be updated shortly.**
+Sweet Jumps is an Express based framework / boilerplate stack for Node.js web applications built on a set of proven modules with the flexibility to do what you want with your code.
 
-Boilerplate / framework for Node.js web applications to enable consistency of approach and maintenance.
-
-Copyright 2013 Northern Arizona University
+Copyright 2013/2014 Northern Arizona University
 
 This file is part of Sweet Jumps.
 
@@ -16,77 +14,87 @@ Sweet Jumps is distributed in the hope that it will be useful, but WITHOUT ANY W
 You should have received a copy of the GNU General Public License along with Sweet Jumps. If not, see <http://www.gnu.org/licenses/>.
 
 
-Structure
----------
+What is it?
+-----------
 
-This is a recommended file structure, but not required. If a particular directory does not make sense to have remove it (eg: views and static in a JSON only webservice).
+Sweet Jumps was made to fill a need for a full-stack web framework that was built from existing, proven Node modules. This allows Sweet Jumps to both use the power of the community of Node developers while also providing consistency and speed of development by being opinionated about style and structure.
 
-- *README.md* - A copy of this file.
-- *package.json* - NPM package definition. Contains common dependencies. Recommended: Should also contain scripts definitions for running prod, dev, and supervised environments.
-- *server-simple.js* - Application entry point. Bootstraps environment, initializes and starts the app. Simple version that uses the App class as is.
-- *server-hooked.js* - Application entry point. Bootstraps environment, initializes and starts the app. Example of using application events in initialization.
-- *server-extended.js* - Application entry point. Bootstraps environment, initializes and starts the app. Example of extending the base App class and overriding methods.
-- **app/** - Contains all local application business logic.
-    - **controllers/** - Contains controller or route files. These modules should return a function with the definition `function (app, args...)`.
-    - **middleware/** *(optional)* - Contains application specific Express middleware. These modules should return a function with the definition `function (app, args...)`.
-    - **models/** - Contains database models. These modules should return an object or class. Recommended: Use MongoDB and Mongoose; the module should export both the Schema and the Model objects (see example).
-    - **views/** - Contains view templates. Examples use Jade (preferred), but use whatever makes the most sense for your project.
-    - **scripts/** - Contains source files for client-side JavaScript (unminified, CoffeeScript, etc).
-    - **styles/** - Contains source files for client-side CSS (unminified, SASS, Stylus, etc).
-- **config/** - Application configuration files. Recommended: Files should be separated by environment (at least dev and prod, but also test and stage if appropriate, see example).
-- **modules/** - Contains arbitrary class modules that supply some global functionality, but which are separate from the app and not available via NPM. The structure should be similar to node_modules/. This directory also contains middleware which is used across projects that we have found to be generally useful (error handlers, body parsers, etc).
-    - **sweet-jumps/** - The main application module.
-        - *index.js* - SweetJumps application class. Wraps the Express application, performs necessary setup and includes. Available as `exports.SweetJumps`.
-        - *common.js* - Common utility functions used by App, but which might be handy elsewhere. Available as `exports.common`.
-        - **test/** - Unit test bootstrap module.
-- ***node_modules/*** - Contains module dependencies handled by NPM. Created automatically, do not manually manage.
-- **plugins/** *(optional)* - Contains plugin modules specifically built for the [plugin-manager package](https://bitbucket.org/nauewt/plugin-manager "BitBucket"). Plugins may contain controller, module, or library code. If a specific functionality is handled in plugins, the normal directory is optional. Alternatively, use a separate plugin-manager instance for each type of plugin and use the standard directory structure.
-- **resources/** *(optional)* - Arbitrary data files specific to this project: Database fixtures and migrations, certificates, documentation, flat files, logs.
-- **static/** *(optional)* - Any public files that are served as-is to the client: Images, CSS, JS, etc. Recommended: CSS and JS files should be minified / compiled to this directory from resources/.
-- **test/** - Unit and behavioral tests. Recommended: Use this. At the very least do behavioral tests for your controllers.
+Sweet Jumps is both a boilerplate and a set of tools for generating code, developing, and testing.
+
+Philosophically, Sweet Jumps aims to provide style and practice as well as a physical structure and stack of common modules, but allows you the freedom to swap out what you want. Would you rather use Jade than Handlebars (or don't need templates at all)? Go right ahead! Need a MySQL adapter instead of MongoDB? Not a problem. The rest of the framework will still be available.
 
 
 Quick Start
 -----------
 
-1. Create a new Git repository: `git init`
-2. Add the boilerplate as an upstream remote: `git remote add upstream git@github.com:NorthernArizonaUniversity/sweet-jumps.git`
-3. Pull the boilerplate down: `git pull upstream master`
-    - (Optional) Create a new remote repository at your favorite Git hosting site and add it as your origin: `git remote add origin my-repository-uri.git`
-    - Push your project to your new origin: `git push -u origin --all`
-    - If you later want to grab upgrades from Sweet Jumps, fetch and merge from upstream: `git fetch upstream -v; git merge upstream/master`
+1. Install Sweet Jumps globally (or by whatever method you choose) to gain access to the `sj` command line utility.
+2. Create a new project directory.
+3. Generate a new project: `sj create project --name="My Awesome Project" --server-simple`
+    - Instead of using `--server-simple`, you may wish to use one of the other base application templates: `--server-hooked` allows you to hook Sweet Jumps events, and `--server-extended` provides an application class which extends Sweet Jumps.
+    - If you leave this parameter out, all 3 templates will be copied into your project root, and you can choose one by renaming it.
 4. Install dependencies: `npm install`
-5. Choose a server.js template version from the 3 available in the project root. Rename that file to `server.js` and delete the other 2.
-6. If you are extending the App class to customize functionality, consider moving the class to its own file in the root folder.
-7. Double check the json files in config and customize as needed. In particular, pay attention to the MongoDB and port settings. By default, the devlopment.json file extends and overrides the values in the production.json file, so check both. You should at least have production.json, development.json, and test.json.
-    - **Note**: the config file used at runtime is decided by NODE_ENV (usually either 'dev' or 'prod'). To set this for development, either pass it as a command line parameter `node server.js --node-env=dev` or as an environment variable `NODE_ENV=dev node server.js`. Grunt handles this for you during development.
-    - You may want to, in your project repository, move the existing config files to .sample.json and make local, ignored copies of them so that passwords, paths, or secrets are not stored in the repository.
-8. If you don't already have Grunt on your system, install it: `npm install -g grunt-cli`
-9. Use Grunt during development. Several Grunt tasks are included to ease development, provide linting, unit testing, asset management etc. In particular, during development you should have 2 or 3 terminal windows open running the following Grunt tasks.
-    - "grunt develop" - Starts the node server.js in dev mode and watches for changes (assumes you have a server.js, if you need to run in a different environment, add it after develop: "grunt develop:test"). You should run at least this task; it replaces the need to run with supervisor.
-    - "grunt develop:check" - Watches for server file changes and lints them.
-    - "grunt develop:client" - Watches client files for changes and rebuilds if necessary
-10. Views are written using the Swig templating engine by default (http://paularmstrong.github.io/swig/docs). If you would like to use a different engine, override the App::initializeViews() method.
-11. Start writing routes/controllers, middleware, models, modules, or plugins as needed. Examples are provided for each. CoffeeScript is included by default, so feel free to use it.
+5. Set up your configuration files in `config`. At the very least, you will want to copy `production.example.js` to `production.js`, but `development.js` is useful as well and allows you to override values from production.
+    - **Note**: the config file used at runtime is decided by NODE_ENV (usually either 'dev' or 'prod').
+    - In development, Grunt will handle this for you if you are using `grunt develop` or `grunt server`
+    - By default, the example config files are committed to the repository but the actual files are ignored.
+6. When you run your server, it will appear at http://localhost:5050 by default (or 5051 for development by default).
+9. Start writing routes/controllers, middleware, models, etc as needed. Examples are provided for each. See the documentation for `sj` to see what kinds of modules can be generated for you.
+7. Use Grunt during development. If you don't already have the Grunt CLI on your system, install it: `npm install -g grunt-cli`. Several Grunt tasks are included to ease development, provide linting, unit testing, asset management, and more. In particular, during development you may want to run the following Grunt tasks:
+    - `grunt develop` - Starts the node server.js in dev mode and watches for changes (if you need to run in a different environment, add it after develop: "grunt develop:test").
+    - `grunt develop:check` - Watches for server file changes and lints them.
+    - `grunt develop:client` - Watches client files for changes and rebuilds if necessary
+
+
+The Sweet Jumps CLI Utility
+---------------------------
+
+*Coming Soon*
+
+See `sj list` and `sj help` on the command line.
+
+
+
+Project Structure
+-----------------
+
+This is the standard file structure, but many parts are not required. If a particular directory does not make sense for your application, remove it (eg: views and static in a JSON only webservice).
+
+- **README.md** - A copy of this file.
+- **package.json** - NPM package definition. Contains common dependencies, and is generated for your project.
+- **server.js** - Application entry point. Bootstraps environment, initializes and starts the app. Note that if you generated your project without a `--server` parameter, you will probably have to create or copy this file.
+- **app/** - Contains all your application's business logic.
+    - **controllers/** - Contains controller or route files. These modules return a function with the definition `function (app, args...)`.
+    - **middleware/** *(optional)* - Contains application specific Express middleware. These modules return a function with the definition `function (app, args...)`.
+    - **models/** - Contains database models. By default, Sweet Jumps uses Mongoose models; the module should export both the Schema and the Model objects (see examples).
+    - **views/** - Contains view templates. Swig is used by default (Note, Handlebars will replace Swig soon).
+    - **scripts/** - Contains source files for client-side JavaScript (unminified, CoffeeScript, etc). If you do not plan to have a build process for your client JavaScript, you may want to remove this.
+    - **styles/** - Contains source files for client-side CSS. SASS compilation is included by default, but you may remove this.
+- **config/** - Application configuration files. By default, files are named by environment (at least production, development and test, but also staging and others if appropriate, see examples).
+- **modules/** - *(optional)* - Contains arbitrary class modules that supply some global functionality, but which are separate from the app and not available via NPM. The structure should be similar to node_modules/.
+- **plugins/** *(optional)* - Contains plugin modules specifically built for the [plugin-manager package](https://bitbucket.org/nauewt/plugin-manager "BitBucket"). Plugins may contain controller, module, or library code.
+- **resources/** *(optional)* - Arbitrary data files specific to this project: Database fixtures and migrations, certificates, documentation, flat files, logs.
+- **public/** *(optional)* - Any public files that are served as-is to the client: Images, CSS, JS, etc. It's recommended that CSS and JS files should be minified / compiled to this directory from /app, but that is not required.
+- **test/** - Unit and behavioral tests. See examples.
 
 
 Configuration
 -------------
-Configuration is handled using JSON files in the application's config directory. By default the application will load the JSON file corresponding to the environment being used (usually either 'dev', 'development', 'prod', or 'production', but could be 'test', 'stage', etc). The file loaded can "extend" a different config file and override values specific to the environment without repeating values. Usually, and by default, development.json and test.json both extend production.json. Set all configuration in production and if you need specific settings for development, override just those settings in development.json.
+Configuration is handled using JSON files in the application's config directory. By default the application will load the JSON file corresponding to the environment being used (usually either 'dev' / 'development' or 'prod' / 'production', but could be 'test', 'stage', etc).
+
+The loaded configuration file can "extend" a different config file and override values specific to the current environment without repeating values. Usually, development.json and test.json both extend production.json. In general, you will want to set all configuration in production and if you need specific settings for development, override just those settings in development.json.
 
 ### Configuration keys:
 
-- config-extends - <string> The config file that this file extends and overrides.
-- port - <int> The port to listen for incoming connections on.
-- auto-start - <boolean> If true, the server will automatically start listening for connections when init is finished. This is generally fine if you are using the simple-server model, but this prevents you from hooking events or extending some functions.
-- parse-xml - <boolean> If true, the server will accept and parse requests with XML post bodies if the "Content-Type:application-xml" header is sent.
-- session - <mixed> If truthy a session will be initialized for requests.
+- **config-extends** - (*string*) The config file that this file extends and overrides.
+- **port** - (*int*) The port to listen for incoming connections on (default: 5050).
+- **parse-xml** - (*boolean*) If true, the server will accept and parse requests with XML post bodies if the "Content-Type:application-xml" header is sent.
+- **session** - (*mixed*) If truthy, a session will be initialized for requests.
     - If boolean and true, a default memory store will be used with the application secret.
     - If string, it will try to use it as a key for the type of store to use. Currently only supports "mongo" or "mongodb"
     - If an object, it will use it as the session options object. Store and secret will be set automatically if not provided, and any other cookie options may be specified.
-- secret - <string> Secret key used for secure sessions, just set it to some unique value.
-- mongodb - <object> MongoDB connection config. Generally will have just one key "uri", which contains a mongodb:// connection string. Other keys as used by Mongoose.
-- logger - <object> Logger (Log4js) configuration. By default, just used console, but can also be set to use files in multiple configurations. See https://github.com/nomiddlename/log4js-node for more details.
+- **secret** - (*string*) Secret key used for secure sessions, set it to some unique value.
+- **mongodb** - (*object*) MongoDB connection config. Generally will have just one key "uri", which contains a mongodb:// connection string. Other keys as used by Mongoose.
+- **logger** - (*object*) Logger (Log4js) configuration. By default, just uses console, but can also be set to use files in multiple configurations. See https://github.com/nomiddlename/log4js-node for more details.
 
 ### Application configuration keys:
 
@@ -99,17 +107,16 @@ Configuration is handled using JSON files in the application's config directory.
 Included Components
 -------------------
 
-- CoffeeScript - http://coffeescript.org/
-- Express - http://expressjs.com/
+- Express 4 - http://expressjs.com/
 - Swig (views) - http://paularmstrong.github.io/swig
     - Alternatives:
         - Embedded Javascript templates (ejs) - https://npmjs.org/package/ejs
         - Handlebars - https://npmjs.org/package/handlebars
         - Jade - https://npmjs.org/package/jade
 - nconf (configuration) - https://npmjs.org/package/nconf
-- connect-mongo (session store) - https://npmjs.org/package/connect-mongo
 - Mongoose (models) - http://mongoosejs.com/
 - Plugin Manager (plugins) - https://bitbucket.org/nauewt/plugin-manager
+- connect-mongo (session store) - https://npmjs.org/package/connect-mongo
 - Log4js (logging) - https://npmjs.org/package/log4js
 - Others:
     - Async
@@ -119,7 +126,7 @@ Included Components
     - Grunt
     - Mocha (test framework) - http://visionmedia.github.io/mocha/
     - Chai (test assertions) - http://chaijs.com/
-    - Zombie (headless http client) - http://zombie.labnotes.org/
+    - Zombie (headless HTTP client) - http://zombie.labnotes.org/
 
 
 Roadmap
@@ -131,3 +138,5 @@ Roadmap
 - Ember
 - Bootstrap
 - Templates for both
+- Templates for tests
+- Better logging defaults (log to file in logs)

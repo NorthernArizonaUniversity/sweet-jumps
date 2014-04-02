@@ -49,5 +49,5 @@ ExampleApp.prototype.initializeModels = function () {
 
 
 // Then in this file, create a new instance
-var app = new ExampleApp({ 'auto-start': false })
+var app = new ExampleApp()
 app.start()

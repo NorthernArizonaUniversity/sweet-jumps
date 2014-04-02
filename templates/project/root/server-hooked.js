@@ -19,7 +19,7 @@
  */
 
 var SweetJumps = require('sweet-jumps').SweetJumps
-  , app = new SweetJumps({ 'auto-start': false })
+  , app = new SweetJumps()
 
 // Hook an init event (see README.md for all events)
 app.on('controllers-loaded', function (controllers) {

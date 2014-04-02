@@ -1,6 +1,5 @@
 {
   "access-log":  true,
-  "auto-start":  false,
   "mongodb":     { "url": "mongodb://localhost/db" },
   "parse-xml":   true,
   "port":        5050,
