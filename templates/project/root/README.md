@@ -46,7 +46,7 @@ See `sj list` and `sj help` on the command line.
 Project Structure
 -----------------
 
-This is the standard file structure, but many parts are not required. If a particular directory does not make sense for your application, remove it (eg: views and static in a JSON only webservice).
+This is the standard file structure, but many parts are not required. If a particular directory does not make sense for your application, remove it (eg: views and public in a JSON only webservice).
 
 - **README.md** - A copy of this file.
 - **package.json** - NPM package definition. Contains common dependencies, and is generated for your project.

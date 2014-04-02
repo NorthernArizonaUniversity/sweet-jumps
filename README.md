@@ -87,8 +87,8 @@ The loaded configuration file can "extend" a different config file and override 
 
 ### Application configuration keys:
 
-- app - Your application's domain configuration. These values will be available in all controllers, views, etc.
-- controllers / middleware / models / plugins - Keys in these objects are the names of the components of that type that you would like to load, and the values are specific configuration that will be passed to the init function or options of that component. If this key is omitted entirely.
+- **app** - Your application's custom configuration. These values will be available in all controllers, views, etc.
+- **controllers** / **middleware** / **models** / **plugins** - Keys in these objects are the names of the modules of that type that you would like to load, and the values are configuration that will be passed to the module's init function. See examples.
     - If this key is omitted for controllers, middleware, or models, *every* module of that type will be loaded with a blank configuration. On the other hand, if the key is present but empty, *no* modules of that type will be loaded.
     - If this key is omitted for plugins or is empty, *no* plugins will be loaded. Plugins must be specified by name but the configuration object may be empty.
 
