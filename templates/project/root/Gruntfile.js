@@ -153,10 +153,10 @@ module.exports = function(grunt) {
    */
   grunt.registerTask('server', function (env) {
     if (
-      !grunt.file.exists(grunt.config('nodemon.server.options.file'))
+      !grunt.file.exists(grunt.config('nodemon.server.script'))
       && grunt.file.exists('server-simple.js')
     ) {
-      grunt.config('nodemon.server.options.file', 'server-simple.js')
+      grunt.config('nodemon.server.script', 'server-simple.js')
     }
 
     if (env) {
