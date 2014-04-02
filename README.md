@@ -3,17 +3,6 @@ Sweet Jumps - A Node.js Web Framework
 
 Sweet Jumps is an Express based framework / boilerplate stack for Node.js web applications built on a set of proven modules with the flexibility to do what you want with your code.
 
-Copyright 2013/2014 Northern Arizona University
-
-This file is part of Sweet Jumps.
-
-Sweet Jumps is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-Sweet Jumps is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with Sweet Jumps. If not, see <http://www.gnu.org/licenses/>.
-
-
 What is it?
 -----------
 
@@ -27,7 +16,7 @@ Philosophically, Sweet Jumps aims to provide style and practice as well as a phy
 Quick Start
 -----------
 
-1. Install Sweet Jumps globally (or by whatever method you choose) to gain access to the `sj` command line utility.
+1. Install Sweet Jumps globally (or by whatever method you choose) to gain access to the `sj` command line utility: `npm -g install sweet-jumps`
 2. Create a new project directory.
 3. Generate a new project: `sj create project --name="My Awesome Project" --server-simple`
     - Instead of using `--server-simple`, you may wish to use one of the other base application templates: `--server-hooked` allows you to hook Sweet Jumps events, and `--server-extended` provides an application class which extends Sweet Jumps.
@@ -140,3 +129,17 @@ Roadmap
 - Templates for both
 - Templates for tests
 - Better logging defaults (log to file in logs)
+
+
+License
+-------
+
+Copyright 2013/2014 Northern Arizona University
+
+This file is part of Sweet Jumps.
+
+Sweet Jumps is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Sweet Jumps is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with Sweet Jumps. If not, see <http://www.gnu.org/licenses/>.
