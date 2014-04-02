@@ -73,7 +73,5 @@
     "scaffold",
     "boilerplate"
   ],
-  "readmeFilename": "README.md",
-  "_id": "sweet-jumps@0.12.1",
-  "_from": "sweet-jumps@latest"
+  "readmeFilename": "README.md"
 }
