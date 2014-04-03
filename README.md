@@ -1,9 +1,7 @@
 Sweet Jumps - A Node.js Web Framework
 =====================================
 
-![NPM Version](http://img.shields.io/npm/v/sweet-jumps.svg)
-![GitHub Release](http://img.shields.io/github/release/NorthernArizonaUniversity/sweet-jumps.svg)
-![Dependency Status](https://david-dm.org/nau/sweet-jumps.png)
+[![NPM Version](http://img.shields.io/npm/v/sweet-jumps.svg)](https://www.npmjs.org/package/sweet-jumps) [![GitHub Release](http://img.shields.io/github/release/NorthernArizonaUniversity/sweet-jumps.svg)](https://github.com/NorthernArizonaUniversity/sweet-jumps/releases)
 
 Sweet Jumps is an Express based framework / boilerplate stack for Node.js web applications built on a set of proven modules with the flexibility to do what you want with your code.
 
