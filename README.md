@@ -66,9 +66,9 @@ The Sweet Jumps CLI Utility
 *Coming Soon*
 
 See:
+
         $ sj list
         $ sj help
-
 
 
 Project Structure
