@@ -11,12 +11,12 @@
 <h3>config.app</h3>
 <ul>
   {{#each config.app}}
-    <li>{{@key}}: {{value}}</li>
+    <li>{{@key}}: {{this}}</li>
   {{/each}}
 </ul>
 <h3>config.paths</h3>
 <ul>
   {{#each config.path}}
-    <li>{{@key}}: {{value}}</li>
+    <li>{{@key}}: {{this}}</li>
   {{/each}}
 </ul>
