@@ -65,7 +65,9 @@ The Sweet Jumps CLI Utility
 
 *Coming Soon*
 
-See `$ sj list` and `$ sj help` on the command line.
+See:
+        $ sj list
+        $ sj help
 
 
 
