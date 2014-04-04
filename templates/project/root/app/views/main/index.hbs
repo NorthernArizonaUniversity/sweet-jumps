@@ -1,0 +1,22 @@
+{{!< default}}
+
+<h1>{{message}}</h1>
+<p>This is an example page.</p>
+
+<h2>Configuration</h2>
+<p>Template variables should be explicitly declared in each route,
+  but for convenience, the config / app settings can be accessed using
+  either the config global (all configuration), or the settings global
+  (just app settings.)
+<h3>config.app</h3>
+<ul>
+  {{#each config.app}}
+    <li>{{@key}}: {{value}}</li>
+  {{/each}}
+</ul>
+<h3>config.paths</h3>
+<ul>
+  {{#each config.path}}
+    <li>{{@key}}: {{value}}</li>
+  {{/each}}
+</ul>

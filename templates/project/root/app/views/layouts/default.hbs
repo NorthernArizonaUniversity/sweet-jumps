@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html language="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{settings.title}}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {{> global-css}}
+    {{{block "end-head"}}}
+  </head>
+  <body>
+    <header>
+      {{{block "header"}}}
+    </header>
+    <div id="content">
+      {{{body}}}
+    </div>
+    <footer>
+      {{{block "footer"}}}
+    </footer>
+
+    {{> global-js}}
+    {{{block "end-body"}}}
+  </body>

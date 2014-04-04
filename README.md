@@ -57,7 +57,7 @@ This is the standard file structure, but many parts are not required. If a parti
     - **controllers/** - Contains controller or route files. These modules return a function with the definition `function (app, args...)`.
     - **middleware/** *(optional)* - Contains application specific Express middleware. These modules return a function with the definition `function (app, args...)`.
     - **models/** - Contains database models. By default, Sweet Jumps uses Mongoose models; the module should export both the Schema and the Model objects (see examples).
-    - **views/** - Contains view templates. Swig is used by default (Note, Handlebars will replace Swig soon).
+    - **views/** - Contains view templates. Handlebars is used by default.
     - **scripts/** - Contains source files for client-side JavaScript (unminified, CoffeeScript, etc). If you do not plan to have a build process for your client JavaScript, you may want to remove this.
     - **styles/** - Contains source files for client-side CSS. SASS compilation is included by default, but you may remove this.
 - **config/** - Application configuration files. By default, files are named by environment (at least production, development and test, but also staging and others if appropriate, see examples).
@@ -99,14 +99,14 @@ Included Components
 -------------------
 
 - Express 4 - http://expressjs.com/
-- Swig (views) - http://paularmstrong.github.io/swig
+- Handlebars (views) - https://www.npmjs.org/package/express-hbs
     - Alternatives:
         - Embedded Javascript templates (ejs) - https://npmjs.org/package/ejs
-        - Handlebars - https://npmjs.org/package/handlebars
+        - Swig - http://paularmstrong.github.io/swig
         - Jade - https://npmjs.org/package/jade
 - nconf (configuration) - https://npmjs.org/package/nconf
 - Mongoose (models) - http://mongoosejs.com/
-- Plugin Manager (plugins) - https://bitbucket.org/nauewt/plugin-manager
+- Plugout (plugins) - https://github.com/NorthernArizonaUniversity/plugout
 - connect-mongo (session store) - https://npmjs.org/package/connect-mongo
 - Log4js (logging) - https://npmjs.org/package/log4js
 - Others:
@@ -123,14 +123,12 @@ Included Components
 Roadmap
 -------
 
-- Rename static to public
-- Express 4
-- https://github.com/ericf/express3-handlebars
 - Ember
 - Bootstrap
 - Templates for both
 - Templates for tests
 - Better logging defaults (log to file in logs)
+- Load global or package middleware from config
 
 
 License

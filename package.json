@@ -1,6 +1,6 @@
 {
   "name": "sweet-jumps",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "author": "NAU Enterprise Web Team <ITS-EIS-EWT@xdl.nau.edu>",
   "contributors": [
     {
@@ -45,6 +45,7 @@
     "cookie-parser": "^1.0.1",
     "csurf": "^1.0.0",
     "express": "https://github.com/visionmedia/express/archive/4.0.0-rc4.tar.gz",
+    "express-hbs": "^0.7.9",
     "express-session": "^1.0.2",
     "grunt": "^0.4.2",
     "grunt-init": "^0.3.1",

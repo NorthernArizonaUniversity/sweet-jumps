@@ -1,6 +1,8 @@
 Sweet Jumps - A Node.js Web Framework
 =====================================
 
+[![NPM Version](http://img.shields.io/npm/v/sweet-jumps.svg)](https://www.npmjs.org/package/sweet-jumps) [![GitHub Release](http://img.shields.io/github/release/NorthernArizonaUniversity/sweet-jumps.svg)](https://github.com/NorthernArizonaUniversity/sweet-jumps/releases) [![License](http://img.shields.io/badge/license-GPL3-green.svg)](https://raw.githubusercontent.com/NorthernArizonaUniversity/sweet-jumps/master/LICENSE)
+
 Sweet Jumps is an Express based framework / boilerplate stack for Node.js web applications built on a set of proven modules with the flexibility to do what you want with your code.
 
 What is it?
@@ -46,7 +48,7 @@ See `sj list` and `sj help` on the command line.
 Project Structure
 -----------------
 
-This is the standard file structure, but many parts are not required. If a particular directory does not make sense for your application, remove it (eg: views and public in a JSON only webservice).
+This is the standard file structure, but many parts are not required. If a particular directory does not make sense for your application, remove it (eg: views and static in a JSON only webservice).
 
 - **README.md** - A copy of this file.
 - **package.json** - NPM package definition. Contains common dependencies, and is generated for your project.
@@ -87,8 +89,8 @@ The loaded configuration file can "extend" a different config file and override 
 
 ### Application configuration keys:
 
-- app - Your application's domain configuration. These values will be available in all controllers, views, etc.
-- controllers / middleware / models / plugins - Keys in these objects are the names of the components of that type that you would like to load, and the values are specific configuration that will be passed to the init function or options of that component. If this key is omitted entirely.
+- **app** - Your application's custom configuration. These values will be available in all controllers, views, etc.
+- **controllers** / **middleware** / **models** / **plugins** - Keys in these objects are the names of the modules of that type that you would like to load, and the values are configuration that will be passed to the module's init function. See examples.
     - If this key is omitted for controllers, middleware, or models, *every* module of that type will be loaded with a blank configuration. On the other hand, if the key is present but empty, *no* modules of that type will be loaded.
     - If this key is omitted for plugins or is empty, *no* plugins will be loaded. Plugins must be specified by name but the configuration object may be empty.
 
@@ -116,6 +118,19 @@ Included Components
     - Mocha (test framework) - http://visionmedia.github.io/mocha/
     - Chai (test assertions) - http://chaijs.com/
     - Zombie (headless HTTP client) - http://zombie.labnotes.org/
+
+
+Roadmap
+-------
+
+- Rename static to public
+- Express 4
+- https://github.com/ericf/express3-handlebars
+- Ember
+- Bootstrap
+- Templates for both
+- Templates for tests
+- Better logging defaults (log to file in logs)
 
 
 License
