@@ -18,22 +18,46 @@ Philosophically, Sweet Jumps aims to provide style and practice as well as a phy
 Quick Start
 -----------
 
-1. Install Sweet Jumps globally (or by whatever method you choose) to gain access to the `sj` command line utility: `npm -g install sweet-jumps`
+1. Install Sweet Jumps globally (or by whatever method you choose) to gain access to the `sj` command line utility:
+
+        $ npm -g install sweet-jumps`
+
 2. Create a new project directory.
-3. Generate a new project: `sj create project --name="My Awesome Project" --server-simple`
+3. Generate a new project:
+
+        $ sj create project --name="My Awesome Project" --server-simple`
+
     - Instead of using `--server-simple`, you may wish to use one of the other base application templates: `--server-hooked` allows you to hook Sweet Jumps events, and `--server-extended` provides an application class which extends Sweet Jumps.
     - If you leave this parameter out, all 3 templates will be copied into your project root, and you can choose one by renaming it.
-4. Install dependencies: `npm install`
-5. Set up your configuration files in `config`. At the very least, you will want to copy `production.example.js` to `production.js`, but `development.js` is useful as well and allows you to override values from production.
-    - **Note**: the config file used at runtime is decided by NODE_ENV (usually either 'dev' or 'prod').
-    - In development, Grunt will handle this for you if you are using `grunt develop` or `grunt server`
-    - By default, the example config files are committed to the repository but the actual files are ignored.
-6. When you run your server, it will appear at http://localhost:5050 by default (or 5051 for development by default).
+4. Install dependencies:
+
+        $ npm install
+
+5. Set up your configuration files in /config.
+
+        $ cp config/production.example.json config/production.json
+
+    - There are also example development and test config files that you might want to copy. The config file used at runtime is decided by NODE_ENV (usually either 'dev' or 'prod').
+6. When you run your server, it will appear at http://localhost:5050 by default (or 5051 if you also copy the default development config).
 9. Start writing routes/controllers, middleware, models, etc as needed. Examples are provided for each. See the documentation for `sj` to see what kinds of modules can be generated for you.
-7. Use Grunt during development. If you don't already have the Grunt CLI on your system, install it: `npm install -g grunt-cli`. Several Grunt tasks are included to ease development, provide linting, unit testing, asset management, and more. In particular, during development you may want to run the following Grunt tasks:
-    - `grunt develop` - Starts the node server.js in dev mode and watches for changes (if you need to run in a different environment, add it after develop: "grunt develop:test").
-    - `grunt develop:check` - Watches for server file changes and lints them.
-    - `grunt develop:client` - Watches client files for changes and rebuilds if necessary
+7. Use Grunt during development. If you don't already have the Grunt CLI on your system, install it:
+
+        $ npm install -g grunt-cli
+
+   Several Grunt tasks are included to ease development, provide linting, unit testing, asset management, and more. In particular, during development you may want to run the following Grunt tasks:
+
+   Start the node server.js in dev mode and watch for changes (if you need to run in a different environment, add it after develop):
+
+        $ grunt develop
+
+   Watches for server file changes and lints them:
+
+        $ grunt develop:check
+
+   Watches client files for changes and rebuilds if necessary:
+
+        $ grunt develop:client
+
 
 
 The Sweet Jumps CLI Utility
@@ -41,7 +65,7 @@ The Sweet Jumps CLI Utility
 
 *Coming Soon*
 
-See `sj list` and `sj help` on the command line.
+See `$ sj list` and `$ sj help` on the command line.
 
 
 
@@ -62,7 +86,7 @@ This is the standard file structure, but many parts are not required. If a parti
     - **styles/** - Contains source files for client-side CSS. SASS compilation is included by default, but you may remove this.
 - **config/** - Application configuration files. By default, files are named by environment (at least production, development and test, but also staging and others if appropriate, see examples).
 - **modules/** - *(optional)* - Contains arbitrary class modules that supply some global functionality, but which are separate from the app and not available via NPM. The structure should be similar to node_modules/.
-- **plugins/** *(optional)* - Contains plugin modules specifically built for the [plugin-manager package](https://bitbucket.org/nauewt/plugin-manager "BitBucket"). Plugins may contain controller, module, or library code.
+- **plugins/** *(optional)* - Contains plugin modules specifically built for the [Plugout](https://github.com/NorthernArizonaUniversity/plugout "GitHub") plugin manager. Plugins may contain controller, module, or library code.
 - **resources/** *(optional)* - Arbitrary data files specific to this project: Database fixtures and migrations, certificates, documentation, flat files, logs.
 - **public/** *(optional)* - Any public files that are served as-is to the client: Images, CSS, JS, etc. It's recommended that CSS and JS files should be minified / compiled to this directory from /app, but that is not required.
 - **test/** - Unit and behavioral tests. See examples.
@@ -70,11 +94,12 @@ This is the standard file structure, but many parts are not required. If a parti
 
 Configuration
 -------------
+
 Configuration is handled using JSON files in the application's config directory. By default the application will load the JSON file corresponding to the environment being used (usually either 'dev' / 'development' or 'prod' / 'production', but could be 'test', 'stage', etc).
 
 The loaded configuration file can "extend" a different config file and override values specific to the current environment without repeating values. Usually, development.json and test.json both extend production.json. In general, you will want to set all configuration in production and if you need specific settings for development, override just those settings in development.json.
 
-### Configuration keys:
+### Server Configuration
 
 - **config-extends** - (*string*) The config file that this file extends and overrides.
 - **port** - (*int*) The port to listen for incoming connections on (default: 5050).
@@ -87,7 +112,7 @@ The loaded configuration file can "extend" a different config file and override 
 - **mongodb** - (*object*) MongoDB connection config. Generally will have just one key "uri", which contains a mongodb:// connection string. Other keys as used by Mongoose.
 - **logger** - (*object*) Logger (Log4js) configuration. By default, just uses console, but can also be set to use files in multiple configurations. See https://github.com/nomiddlename/log4js-node for more details.
 
-### Application configuration keys:
+### Application Configuration
 
 - **app** - Your application's custom configuration. These values will be available in all controllers, views, etc.
 - **controllers** / **middleware** / **models** / **plugins** - Keys in these objects are the names of the modules of that type that you would like to load, and the values are configuration that will be passed to the module's init function. See examples.
@@ -95,11 +120,29 @@ The loaded configuration file can "extend" a different config file and override 
     - If this key is omitted for plugins or is empty, *no* plugins will be loaded. Plugins must be specified by name but the configuration object may be empty.
 
 
+Controllers & Routers
+---------------------
+
+*Coming Soon*
+
+
+Views
+-----
+
+*Coming Soon*
+
+
+Models
+------
+
+*Coming Soon*
+
+
 Included Components
 -------------------
 
 - Express 4 - http://expressjs.com/
-- Handlebars (views) - https://www.npmjs.org/package/express-hbs
+- Handlebars (views) - https://www.npmjs.org/package/express-hbs & http://handlebarsjs.com/
     - Alternatives:
         - Embedded Javascript templates (ejs) - https://npmjs.org/package/ejs
         - Swig - http://paularmstrong.github.io/swig
