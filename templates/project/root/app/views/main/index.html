@@ -9,15 +9,15 @@
     but for convenience, the config / app settings can be accessed using
     either the config global (all configuration), or the settings global
     (just app settings.)
-  <h3>Using config</h3>
+  <h3>config.app</h3>
   <ul>
     {% for key, value in config.app %}
       <li>{{key}}: {{value}}</li>
     {% endfor %}
   </ul>
-  <h3>Using settings</h3>
+  <h3>config.paths</h3>
   <ul>
-    {% for key, value in settings %}
+    {% for key, value in config.path %}
       <li>{{key}}: {{value}}</li>
     {% endfor %}
   </ul>

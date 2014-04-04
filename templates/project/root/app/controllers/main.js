@@ -24,7 +24,7 @@ module.exports = function (app, options, context) {
 
   app.get('/', function (req, res) {
     res.render('main/index', {
-      'message': 'Hi! It works!'
+      'message': 'Sweet! It works!'
     })
   })
 }
