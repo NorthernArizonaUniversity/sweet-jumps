@@ -133,6 +133,10 @@ Views
 
 *Coming Soon*
 
+See:
+https://www.npmjs.org/package/express-hbs
+http://handlebarsjs.com/
+
 
 Models
 ------
@@ -168,6 +172,7 @@ Included Components
 Roadmap
 -------
 
+- app.Router?
 - Ember
 - Bootstrap
 - Templates for both
