@@ -1,8 +1,8 @@
 <!-- global css -->
 
 <!-- Bootstrap -->
-<link href="/vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="/vendor/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+<link href="/vendor/bootstrap/dist/css/bootstrap.{{#if isProduction}}min.{{/if}}css" rel="stylesheet">
+<link href="/vendor/bootstrap/dist/css/bootstrap-theme.{{#if isProduction}}min.{{/if}}css" rel="stylesheet">
 
 <!-- end global css -->
 
@@ -12,3 +12,20 @@
   <script src="//cdn.jsdelivr.net/html5shiv/3.7.0/html5shiv.js"></script>
   <script src="//cdn.jsdelivr.net/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+<style>
+  body {
+    padding-top: 70px;
+    padding-bottom: 30px;
+  }
+
+  .theme-dropdown .dropdown-menu {
+    position: static;
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .theme-showcase > p > .btn {
+    margin: 5px 0;
+  }
+</style>

@@ -1,13 +1,13 @@
 <!-- global js -->
-<script src="/vendor/jquery/dist/jquery.min.js"></script>
-<script src="/vendor/handlebars/handlebars.min.js"></script>
-<script src="/vendor/ember/ember.min.js"></script>
-<script src="/vendor/ember-data/ember-data.min.js"></script>
+<script src="/vendor/jquery/dist/jquery.{{#if isProduction}}min.{{/if}}js"></script>
+<script src="/vendor/handlebars/handlebars.{{#if isProduction}}min.{{/if}}js"></script>
+<script src="/vendor/ember/ember.{{#if isProduction}}min.{{/if}}js"></script>
+<script src="/vendor/ember-data/ember-data.{{#if isProduction}}min.{{/if}}js"></script>
 
-<script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/vendor/bootstrap/dist/js/bootstrap.{{#if isProduction}}min.{{/if}}js"></script>
 
-<script src="/vendor/ember-addons.bs_for_ember/dist/js/bs-core.min.js"></script>
-<script src="/vendor/ember-addons.bs_for_ember/dist/js/bs-alert.min.js"></script>
+<script src="/vendor/ember-addons.bs_for_ember/dist/js/bs-core.{{#if isProduction}}min{{else}}max{{/if}}.js"></script>
+<script src="/vendor/ember-addons.bs_for_ember/dist/js/bs-alert.{{#if isProduction}}min{{else}}max{{/if}}.js"></script>
 
 <script src="/js/app.js"></script>
 <!-- end global js -->
