@@ -18,29 +18,29 @@ Philosophically, Sweet Jumps aims to provide style and practice as well as a phy
 Quick Start
 -----------
 
-1. Install Sweet Jumps globally (or by whatever method you choose) to gain access to the `sj` command line utility:
+- Install Sweet Jumps globally (or by whatever method you choose) to gain access to the `sj` command line utility:
 
         $ npm -g install sweet-jumps`
 
-2. Create a new project directory.
-3. Generate a new project:
+- Create a new project directory.
+- Generate a new project:
 
         $ sj create project --name="My Awesome Project" --server-simple`
 
     - Instead of using `--server-simple`, you may wish to use one of the other base application templates: `--server-hooked` allows you to hook Sweet Jumps events, and `--server-extended` provides an application class which extends Sweet Jumps.
     - If you leave this parameter out, all 3 templates will be copied into your project root, and you can choose one by renaming it.
-4. Install dependencies:
+- Install dependencies:
 
         $ npm install
 
-5. Set up your configuration files in /config.
+- Set up your configuration files in /config.
 
         $ cp config/production.example.json config/production.json
 
     - There are also example development and test config files that you might want to copy. The config file used at runtime is decided by NODE_ENV (usually either 'dev' or 'prod').
-6. When you run your server, it will appear at http://localhost:5050 by default (or 5051 if you also copy the default development config).
-9. Start writing routes/controllers, middleware, models, etc as needed. Examples are provided for each. See the documentation for `sj` to see what kinds of modules can be generated for you.
-7. Use Grunt during development. If you don't already have the Grunt CLI on your system, install it:
+- When you run your server, it will appear at http://localhost:5050 by default (or 5051 if you also copy the default development config).
+- Start writing routes/controllers, middleware, models, etc as needed. Examples are provided for each. See the documentation for `sj` to see what kinds of modules can be generated for you.
+- Use Grunt during development. If you don't already have the Grunt CLI on your system, install it:
 
         $ npm install -g grunt-cli
 
@@ -134,14 +134,19 @@ Views
 *Coming Soon*
 
 See:
-https://www.npmjs.org/package/express-hbs
-http://handlebarsjs.com/
+
+ - https://www.npmjs.org/package/express-hbs
+ - http://handlebarsjs.com/
 
 
 Models
 ------
 
 *Coming Soon*
+
+See:
+
+ - http://mongoosejs.com/docs/models.html
 
 
 Included Components
@@ -167,18 +172,6 @@ Included Components
     - Mocha (test framework) - http://visionmedia.github.io/mocha/
     - Chai (test assertions) - http://chaijs.com/
     - Zombie (headless HTTP client) - http://zombie.labnotes.org/
-
-
-Roadmap
--------
-
-- app.Router?
-- Ember
-- Bootstrap
-- Templates for both
-- Templates for tests
-- Better logging defaults (log to file in logs)
-- Load global or package middleware from config
 
 
 License

@@ -1,0 +1,9 @@
+{
+  "name": "sweet-jumps",
+  "dependencies": {
+    "ember": "~1.5.0",
+    "ember-data": "~0.0.14",
+    "bootstrap": "~3.1.1",
+    "ember-addons.bs_for_ember": "~0.6.1"
+  }
+}

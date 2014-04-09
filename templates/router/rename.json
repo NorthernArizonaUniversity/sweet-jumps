@@ -1,4 +1,4 @@
 {
   "index.js": "app/controllers/{%= filename %}/index.js",
-  "view.html": "app/views/{%= filename %}/route/index.html"
+  "view.hbs": "app/views/{%= filename %}/route/index.hbs"
 }

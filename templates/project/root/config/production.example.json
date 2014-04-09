@@ -16,7 +16,7 @@
 
   "app": {
     "how-to-use": "Use this container for all your application specific settings",
-    "title": "[Sweet Jumpss Project]",
+    "title": "Sweet Jumps App",
     "misc": "value"
   },
   "controllers-disabled": {

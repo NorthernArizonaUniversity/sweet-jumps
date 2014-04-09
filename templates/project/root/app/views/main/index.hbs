@@ -1,22 +1,55 @@
 {{!< default}}
 
-<h1>{{message}}</h1>
-<p>This is an example page.</p>
+<div class="container theme-showcase" role="main">
 
-<h2>Configuration</h2>
-<p>Template variables should be explicitly declared in each route,
-  but for convenience, the config / app settings can be accessed using
-  either the config global (all configuration), or the settings global
-  (just app settings.)
-<h3>config.app</h3>
-<ul>
-  {{#each config.app}}
-    <li>{{@key}}: {{this}}</li>
-  {{/each}}
-</ul>
-<h3>config.paths</h3>
-<ul>
-  {{#each config.path}}
-    <li>{{@key}}: {{this}}</li>
-  {{/each}}
-</ul>
+  <div class="jumbotron">
+    <h1><span class="glyphicon glyphicon-thumbs-up"></span> Sweet! It works!</h1>
+    <p>Your Sweet Jumps site is up and running! Start building it!</p>
+    <p><a href="https://github.com/NorthernArizonaUniversity/sweet-jumps" class="btn btn-primary btn-lg" role="button">Sweet Jumps on GitHub &raquo;</a></p>
+  </div>
+
+  <p>{{message}}</p>
+
+  <div class="page-header">
+    <h1>Configuration</h1>
+  </div>
+
+  <p>Template variables should be explicitly declared in each route,
+    but for convenience, the config / app settings can be accessed using
+    either the config global (all configuration), or the settings global
+    (just app settings.)</p>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">config.app</h3>
+        </div>
+        <div class="panel-body">
+          <ul>
+            {{#each config.app}}
+              <li>{{@key}}: {{this}}</li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">config.path</h3>
+        </div>
+        <div class="panel-body">
+          <ul>
+            {{#each config.path}}
+              <li>{{@key}}: {{this}}</li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div> <!-- /container -->
+
