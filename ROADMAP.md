@@ -1,17 +1,20 @@
 Sweet Jumps Roadmap
 ===================
 
+- https://github.com/devoidfury/express-debug
 - Templates for both
 - Templates for tests
+- Better config layout
 - Better logging defaults (log to file in logs)
 - Load global or package middleware from config
-- app.Router?
 - create scaffold / rest
 - create component
 - create model from introspect
 - create ember model from rest
 - run grunt tasks without grunt cli
-
+- http://passportjs.org/
+- https://github.com/thanpolas/grunt-closure-tools
+- https://github.com/stefanpenner/ember-app-kit
 
 License
 -------

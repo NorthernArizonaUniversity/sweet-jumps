@@ -26,7 +26,7 @@ logger.info('{%= name %} model init')
 
 // 1. TODO: Edit fields
 var {%= name %}Schema = new Schema({
-  key: { type: String, 'default': '' },
+  key: { type: String, 'default': '' }
 })
 
 // 2. TODO: Edit indices
