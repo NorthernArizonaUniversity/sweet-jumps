@@ -47,6 +47,7 @@
     "express": "https://github.com/visionmedia/express/archive/4.0.0-rc4.tar.gz",
     "express-hbs": "^0.7.9",
     "express-session": "^1.0.2",
+    "express-xml-bodyparser": "0.0.4",
     "grunt": "^0.4.2",
     "grunt-init": "^0.3.1",
     "grunt-nodemon": "^0.2.1",
@@ -58,8 +59,8 @@
     "morgan": "^1.0.0",
     "nconf": "^0.6.7",
     "plugout": "^1.2.0",
+    "readline-sync": "^0.2.2",
     "static-favicon": "^1.0.2",
-    "swig": "^1.0",
     "underscore": "^1.6.0",
     "xml2js": "^0.4.1",
     "yargs": "^1.0.15"

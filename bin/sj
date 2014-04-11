@@ -17,8 +17,8 @@ var sj = require('../lib/sj-cli')
   , package = require('../package.json')
   , ln = '\n'
   , argv = require('yargs')
-    .alias('v', 'verbose')
-    .argv
+      .alias('v', 'verbose')
+      .argv
 
 sj.scriptname = argv.$0
 
@@ -28,7 +28,48 @@ sj.scriptname = argv.$0
  * @return {[type]}       [description]
  */
 ;(function main() {
-  sj.print(('Sweet Jumps (' + package.version + ')' + ln).bold.grey)
+  sj.println(('Sweet Jumps'.bold + ' (' + package.version + ')' + ln).bold.grey)
+
+
+  var derp = function (err, derp) { sj.println(derp) + '\n' }
+
+  /*
+
+  sj.question({
+    question: 'What is your derp?'
+  }, derp)
+
+  sj.question({
+    question: 'What color is your derp?',
+    options: ['blue', 'red', 'fuscia'],
+  }, derp)
+
+  sj.question({
+    question: 'What number is your derp?',
+    options: ['1', '2', '3'],
+    default: '2'
+  }, derp)
+
+  sj.question({
+    question: 'What smell is your derp?',
+    default: 'wintergreen'
+  }, derp)
+
+  sj.question({
+    question: 'Do you want fries with that?',
+    boolean: true
+  }, derp)
+
+  sj.question({
+    question: 'Do you want flies with that?',
+    default: 'n',
+    boolean: true
+  }, derp)
+
+  */
+
+  //return
+
 
   var args = argv._.slice()
     , taskname = args.shift()
