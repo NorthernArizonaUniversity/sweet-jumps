@@ -44,7 +44,7 @@
     "connect-mongo": "^0.4.0",
     "cookie-parser": "^1.0.1",
     "csurf": "^1.0.0",
-    "express": "https://github.com/visionmedia/express/archive/4.0.0-rc4.tar.gz",
+    "express": "^4.0.0",
     "express-hbs": "^0.7.9",
     "express-session": "^1.0.2",
     "express-xml-bodyparser": "0.0.4",

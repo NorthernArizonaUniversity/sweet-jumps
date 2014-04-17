@@ -11,7 +11,9 @@ Sweet Jumps Roadmap
 - create component
 - create model from introspect
 - create ember model from rest
+- precompile handlebars shared partials
 - run grunt tasks without grunt cli
+- Sockets through routes
 - http://passportjs.org/
 - https://github.com/thanpolas/grunt-closure-tools
 - https://github.com/stefanpenner/ember-app-kit
