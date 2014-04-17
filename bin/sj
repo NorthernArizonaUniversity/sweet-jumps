@@ -25,39 +25,6 @@ var sj = require('../lib/sj-cli')
 ;(function main() {
   sj.println(('Sweet Jumps'.bold + ' (' + package.version + ')' + ln).bold.grey)
 
-
-  var derp = function (err, derp) { sj.println(derp) + '\n' }
-
-
-  // sj.choose('What color is your derp?', ['blue', 'red', 'fuscia'], {
-  // }, derp)
-
-  // sj.question({
-  //   question: 'What number is your derp?',
-  //   options: ['1', '2', '3'],
-  //   default: '2'
-  // }, derp)
-
-  // sj.question({
-  //   question: 'What smell is your derp?',
-  //   default: 'wintergreen'
-  // }, derp)
-
-  // sj.question({
-  //   question: 'Do you want fries with that?',
-  //   boolean: true
-  // }, derp)
-
-  // sj.question({
-  //   question: 'Do you want flies with that?',
-  //   default: 'n',
-  //   boolean: true
-  // }, derp)
-
-
-  //return
-
-
   var args = sj.argv._.slice()
     , taskname = args.shift()
     , params = args.slice()
