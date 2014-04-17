@@ -59,6 +59,7 @@
     "morgan": "^1.0.0",
     "nconf": "^0.6.7",
     "plugout": "^1.2.0",
+    "promptly": "^0.2.0",
     "readline-sync": "^0.2.2",
     "static-favicon": "^1.0.2",
     "underscore": "^1.6.0",

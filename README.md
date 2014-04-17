@@ -20,18 +20,22 @@ Quick Start
 
 - Install Sweet Jumps globally (or by whatever method you choose) to gain access to the `sj` command line utility:
 
-        $ npm -g install sweet-jumps`
+        $ npm -g install sweet-jumps
 
 - Create a new project directory.
 - Generate a new project:
 
-        $ sj create project --name="My Awesome Project" --server-simple`
+        $ sj create project --name="My Awesome Project" --server-simple
 
     - Instead of using `--server-simple`, you may wish to use one of the other base application templates: `--server-hooked` allows you to hook Sweet Jumps events, and `--server-extended` provides an application class which extends Sweet Jumps.
     - If you leave this parameter out, all 3 templates will be copied into your project root, and you can choose one by renaming it.
 - Install dependencies:
 
         $ npm install
+
+- **Optional** - Install client-side dependencies:
+
+        $ bower install
 
 - Set up your configuration files in /config.
 

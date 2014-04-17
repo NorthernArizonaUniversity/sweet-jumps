@@ -15,6 +15,9 @@ Sweet Jumps Roadmap
 - http://passportjs.org/
 - https://github.com/thanpolas/grunt-closure-tools
 - https://github.com/stefanpenner/ember-app-kit
+- https://github.com/ericf/express3-handlebars (Literal escaping, precompiled templates)
+  - https://github.com/ericf/express3-handlebars/blob/master/examples/advanced/views/layouts/shared-templates.handlebars#L13-22
+  - https://github.com/ericf/express3-handlebars/blob/master/examples/advanced/app.js#L25-55
 
 License
 -------

@@ -16,11 +16,6 @@ var sj = require('../lib/sj-cli')
   , common = require('../lib/sweet-jumps/common')
   , package = require('../package.json')
   , ln = '\n'
-  , argv = require('yargs')
-      .alias('v', 'verbose')
-      .argv
-
-sj.scriptname = argv.$0
 
 /**
  * Main function that processes options and calls tasks
@@ -33,50 +28,42 @@ sj.scriptname = argv.$0
 
   var derp = function (err, derp) { sj.println(derp) + '\n' }
 
-  /*
 
-  sj.question({
-    question: 'What is your derp?'
-  }, derp)
+  // sj.choose('What color is your derp?', ['blue', 'red', 'fuscia'], {
+  // }, derp)
 
-  sj.question({
-    question: 'What color is your derp?',
-    options: ['blue', 'red', 'fuscia'],
-  }, derp)
+  // sj.question({
+  //   question: 'What number is your derp?',
+  //   options: ['1', '2', '3'],
+  //   default: '2'
+  // }, derp)
 
-  sj.question({
-    question: 'What number is your derp?',
-    options: ['1', '2', '3'],
-    default: '2'
-  }, derp)
+  // sj.question({
+  //   question: 'What smell is your derp?',
+  //   default: 'wintergreen'
+  // }, derp)
 
-  sj.question({
-    question: 'What smell is your derp?',
-    default: 'wintergreen'
-  }, derp)
+  // sj.question({
+  //   question: 'Do you want fries with that?',
+  //   boolean: true
+  // }, derp)
 
-  sj.question({
-    question: 'Do you want fries with that?',
-    boolean: true
-  }, derp)
+  // sj.question({
+  //   question: 'Do you want flies with that?',
+  //   default: 'n',
+  //   boolean: true
+  // }, derp)
 
-  sj.question({
-    question: 'Do you want flies with that?',
-    default: 'n',
-    boolean: true
-  }, derp)
-
-  */
 
   //return
 
 
-  var args = argv._.slice()
+  var args = sj.argv._.slice()
     , taskname = args.shift()
     , params = args.slice()
     , task = sj.getTask(taskname) || sj.getTask('help')
 
-  // common.dump(argv)
+  // common.dump(sj.argv)
 
-  task(taskname, params, argv)
+  task(taskname, params, sj.argv)
 })()

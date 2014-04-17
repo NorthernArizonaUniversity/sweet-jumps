@@ -28,6 +28,7 @@ module.exports = function(grunt) {
         options: {
           args: [],
           nodeArgs: [],
+          ext: 'js,coffee,json,html,hbs,scss,less,styl',
           ignore: ['README.md', 'test/**', 'node_modules/**', '.git/**', '.idea/**'],
           delayTime: 1,
           env: {
