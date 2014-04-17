@@ -15,7 +15,6 @@
 var sj = require('../lib/sj-cli')
   , common = require('../lib/sweet-jumps/common')
   , package = require('../package.json')
-  , ln = '\n'
 
 /**
  * Main function that processes options and calls tasks
@@ -23,7 +22,7 @@ var sj = require('../lib/sj-cli')
  * @return {[type]}       [description]
  */
 ;(function main() {
-  sj.println(('Sweet Jumps'.bold + ' (' + package.version + ')' + ln).bold.grey)
+  sj.println(('Sweet Jumps'.bold + ' (' + package.version + ')\n').bold.grey)
 
   var args = sj.argv._.slice()
     , taskname = args.shift()
