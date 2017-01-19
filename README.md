@@ -176,7 +176,7 @@ Included Components
     - Grunt
 - Development / Testing
     - Grunt
-    - Mocha (test framework) - http://visionmedia.github.io/mocha/
+    - Mocha (test framework) - http://mochajs.org/
     - Chai (test assertions) - http://chaijs.com/
     - Zombie (headless HTTP client) - http://zombie.labnotes.org/
 
